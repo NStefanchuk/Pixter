@@ -1,7 +1,12 @@
 import './App.css'
+import Authorization from './pages/Authorization'
 
 function App() {
-  return <></>
+  return (
+    <>
+      <Authorization />
+    </>
+  )
 }
 
 export default App

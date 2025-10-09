@@ -1,0 +1,152 @@
+{
+  "posts": [],
+  "comments": [],
+  "profile": [
+    {
+      "id": "9876543210",
+      "username": "travel_with_anna",
+      "full_name": "Anna Petrova",
+      "bio": "🌍 Traveler | 📸 Photographer | ✈️ Sharing my adventures",
+      "website": "https://annatravelblog.com",
+      "email": "anna@example.com",
+      "phone_number": "+79998887766",
+      "gender": "female",
+      "birthday": "1993-07-15",
+      "profile_picture_url": "https://instagram.com/profile_images/anna.jpg",
+      "is_private": false,
+      "is_verified": true,
+      "is_business_account": true,
+      "is_professional_account": true,
+      "account_type": "creator",
+      "category": "Travel Blogger",
+      "language": "en",
+      "country": "Russia",
+      "city": "Moscow",
+      "timezone": "Europe/Moscow",
+      "joined_date": "2015-06-12T10:45:00Z",
+      "last_login": "2025-10-09T08:23:45Z",
+      "followers_count": 287430,
+      "following_count": 512,
+      "posts_count": 1453,
+      "reels_count": 220,
+      "stories_count": 312,
+      "saved_posts_count": 87,
+      "highlight_reels": [
+        {
+          "id": "hl001",
+          "title": "Bali Trip",
+          "cover_url": "https://instagram.com/highlights/bali.jpg",
+          "stories_count": 23
+        },
+        {
+          "id": "hl002",
+          "title": "Iceland",
+          "cover_url": "https://instagram.com/highlights/iceland.jpg",
+          "stories_count": 19
+        }
+      ],
+      "recent_posts": [
+        {
+          "id": "p_1",
+          "image_url": "https://instagram.com/posts/photo1.jpg",
+          "caption": "Sunset in Santorini 🌅",
+          "likes": 12045,
+          "comments": 312,
+          "posted_at": "2025-09-20T18:45:00Z",
+          "location": "Santorini, Greece",
+          "tags": ["sunset", "travel", "greece"],
+          "mentions": ["@travelbuddy"]
+        },
+        {
+          "id": "p_2",
+          "image_url": "https://instagram.com/posts/photo2.jpg",
+          "caption": "Exploring the Icelandic glaciers ❄️",
+          "likes": 9320,
+          "comments": 178,
+          "posted_at": "2025-09-14T15:22:00Z",
+          "location": "Vatnajökull, Iceland",
+          "tags": ["iceland", "glaciers", "nature"]
+        }
+      ],
+      "engagement_rate": 5.2,
+      "average_likes": 9800,
+      "average_comments": 210,
+      "most_popular_post_id": "p_1",
+      "story_view_avg": 14500,
+      "story_reply_avg": 50,
+      "audience_demographics": {
+        "age_groups": {
+          "13-17": 5,
+          "18-24": 30,
+          "25-34": 45,
+          "35-44": 15,
+          "45+": 5
+        },
+        "gender_distribution": {
+          "female": 65,
+          "male": 35
+        },
+        "top_countries": ["Russia", "Germany", "USA", "Italy"],
+        "top_cities": ["Moscow", "Berlin", "New York", "Rome"]
+      },
+      "business_info": {
+        "business_category": "Travel & Tourism",
+        "brand_partnerships": [
+          {
+            "brand_name": "Airbnb",
+            "campaign_name": "Live Anywhere 2025",
+            "start_date": "2025-04-01",
+            "end_date": "2025-06-30",
+            "sponsored_posts": 3
+          }
+        ],
+        "has_active_promotions": true,
+        "ad_spend_last_month": 500.0,
+        "average_reach": 82000
+      },
+      "security": {
+        "two_factor_enabled": true,
+        "login_alerts_enabled": true,
+        "devices_logged_in": [
+          {
+            "device_name": "iPhone 14 Pro",
+            "location": "Moscow",
+            "last_access": "2025-10-09T08:23:45Z"
+          },
+          {
+            "device_name": "MacBook Air M3",
+            "location": "Berlin",
+            "last_access": "2025-09-30T14:10:12Z"
+          }
+        ]
+      },
+      "preferences": {
+        "theme": "dark",
+        "notifications": {
+          "likes": true,
+          "comments": true,
+          "new_followers": true,
+          "direct_messages": true,
+          "live_streams": false
+        },
+        "language_preference": "en",
+        "content_visibility": {
+          "show_activity_status": true,
+          "allow_message_replies": "followers",
+          "allow_tagging": true
+        }
+      },
+      "linked_accounts": {
+        "facebook": "fb.com/anna.petrova",
+        "threads": "threads.net/@travel_with_anna",
+        "tiktok": "@anna_travel",
+        "youtube": "youtube.com/@annatravelvlogs"
+      },
+      "meta": {
+        "created_at": "2025-10-09T09:00:00Z",
+        "updated_at": "2025-10-09T09:10:00Z",
+        "data_source": "instagram_api_v2"
+      }
+    }
+  ]
+}
