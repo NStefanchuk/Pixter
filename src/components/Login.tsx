@@ -5,9 +5,10 @@ type TLoginProps = {
   setUserLogin: React.Dispatch<
     React.SetStateAction<{ email: string; password: string }>
   >
+  isLoading: boolean
 }
 
-const Login = ({ userLogin, setUserLogin }: TLoginProps) => {
+const Login = ({ userLogin, setUserLogin, isLoading }: TLoginProps) => {
   const handleChangeUserData = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setUserLogin({ ...userLogin, [name]: value })
@@ -30,7 +31,9 @@ const Login = ({ userLogin, setUserLogin }: TLoginProps) => {
         value={userLogin.password}
         onChange={handleChangeUserData}
       />
-      <button className={Styles.authButton}>Login</button>
+      <button className={Styles.authButton} disabled={isLoading}>
+        Login
+      </button>
     </>
   )
 }

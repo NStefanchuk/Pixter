@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Login from '../components/Login'
 import Registration from '../components/Registration'
 import Styles from '../styles/auth.module.css'
+import { toast } from 'react-hot-toast'
 
 const Authorization = () => {
   const [isLogin, setIsLogin] = useState(true)
@@ -47,7 +48,7 @@ const Authorization = () => {
       )
       const user = await getData.json()
       if (user.length > 0) {
-        alert('email is already exist')
+        toast.error('Email is already exist')
         return
       }
       const newUser = {
@@ -73,22 +74,25 @@ const Authorization = () => {
     try {
       e.preventDefault()
       const email = userLogin.email.trim().toLowerCase()
+      setIsLoading(true)
       const getUser = await fetch(
         `http://localhost:3000/users?email=${encodeURIComponent(email)}`
       )
       const user = await getUser.json()
       if (user.length === 0) {
-        alert('user doesnt exist')
+        toast.error('User doesn’t exist')
         return
       }
       const password = userLogin.password
       if (password === user[0].password) {
-        alert('you are logged in succesfully')
+        toast.success('You are logged in successfully')
       } else {
-        alert('wrong password')
+        toast.error('Wrong password')
       }
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
