@@ -18,7 +18,7 @@ const Login = ({ userLogin, setUserLogin }: TLoginProps) => {
         className={Styles.authInput}
         placeholder="Email"
         type="text"
-        name="login"
+        name="email"
         value={userLogin.email}
         onChange={handleChangeUserData}
       />

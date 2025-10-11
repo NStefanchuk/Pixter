@@ -16,6 +16,23 @@ const Authorization = () => {
     password: '',
   })
 
+  const authDict = {
+    login: {
+      title: 'Welcome back',
+      subtitle: 'Sign in to continue',
+      switchQuestion: 'Don’t have an account?',
+      switchAction: 'Sign up',
+    },
+    register: {
+      title: 'Create your Pixter account',
+      subtitle: 'Join the community and start sharing',
+      switchQuestion: 'Already have an account?',
+      switchAction: 'Sign in',
+    },
+  } as const
+
+  const text = isLogin ? authDict.login : authDict.register
+
   const handleSubmitRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault()
@@ -29,7 +46,6 @@ const Authorization = () => {
         `http://localhost:3000/users?email=${encodeURIComponent(email)}`
       )
       const user = await getData.json()
-      console.log(user.length)
       if (user.length > 0) {
         alert('email is already exist')
         return
@@ -53,14 +69,28 @@ const Authorization = () => {
     }
   }
 
-//   const handleLogin = async () => {
-//     try {
-
-//       const getData = await fetch(
-//         `http://localhost:3000/users?email=${encodeURIComponent(email)}`
-//       )
-//     } catch (error) {}
-//   }
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault()
+      const email = userLogin.email.trim().toLowerCase()
+      const getUser = await fetch(
+        `http://localhost:3000/users?email=${encodeURIComponent(email)}`
+      )
+      const user = await getUser.json()
+      if (user.length === 0) {
+        alert('user doesnt exist')
+        return
+      }
+      const password = userLogin.password
+      if (password === user[0].password) {
+        alert('you are logged in succesfully')
+      } else {
+        alert('wrong password')
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <>
@@ -68,14 +98,12 @@ const Authorization = () => {
         <div className={Styles.authCard}>
           <div className={Styles.authHeader}>
             <div className={Styles.authLogo} />
-            <h1 className={Styles.authTitle}>Create your Pixter account</h1>
-            <p className={Styles.authSubtitle}>
-              Join the community and start sharing
-            </p>
+            <h1 className={Styles.authTitle}>{text.title}</h1>
+            <p className={Styles.authSubtitle}>{text.subtitle}</p>
           </div>
           <form
             className={Styles.authForm}
-            onSubmit={!isLogin ? handleSubmitRegister : undefined}
+            onSubmit={isLogin ? handleLogin : handleSubmitRegister}
           >
             {isLogin ? (
               <Login userLogin={userLogin} setUserLogin={setUserLogin} />
@@ -90,7 +118,7 @@ const Authorization = () => {
 
           <div className={Styles.authFooter}>
             <p>
-              Already have an account?
+              {text.switchQuestion}
               <a
                 href="#"
                 onClick={(e) => {
@@ -98,7 +126,7 @@ const Authorization = () => {
                   setIsLogin(!isLogin)
                 }}
               >
-                {isLogin ? 'Sign up' : 'Sign in'}
+                {text.switchAction}
               </a>
             </p>
           </div>
