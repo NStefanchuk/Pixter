@@ -3,8 +3,10 @@ import Login from '../components/Login'
 import Registration from '../components/Registration'
 import Styles from '../styles/auth.module.css'
 import { toast } from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 
 const Authorization = () => {
+  const navigate = useNavigate()
   const [isLogin, setIsLogin] = useState(true)
   const [userData, setUserData] = useState({
     username: '',
@@ -85,7 +87,13 @@ const Authorization = () => {
       }
       const password = userLogin.password
       if (password === user[0].password) {
+        const { id, username, email, createdAt } = user[0]
+        localStorage.setItem(
+          'pixter:user',
+          JSON.stringify({ id, username, email, createdAt })
+        )
         toast.success('You are logged in successfully')
+        navigate('/profile')
       } else {
         toast.error('Wrong password')
       }
