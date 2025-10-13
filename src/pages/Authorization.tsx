@@ -82,8 +82,7 @@ const Authorization = () => {
       )
       const user = await getUser.json()
       if (user.length === 0) {
-        toast.error('User doesn’t exist')
-        return
+        throw new Error('User doesn’t exist')
       }
       const password = userLogin.password
       if (password === user[0].password) {
@@ -95,10 +94,10 @@ const Authorization = () => {
         toast.success('You are logged in successfully')
         navigate('/profile')
       } else {
-        toast.error('Wrong password')
+        throw new Error('Wrong password')
       }
-    } catch (error) {
-      console.error(error)
+    } catch (error:any) {
+      toast.error(error.message)
     } finally {
       setIsLoading(false)
     }
@@ -118,7 +117,11 @@ const Authorization = () => {
             onSubmit={isLogin ? handleLogin : handleSubmitRegister}
           >
             {isLogin ? (
-              <Login userLogin={userLogin} setUserLogin={setUserLogin} />
+              <Login
+                isLoading={isLoading}
+                userLogin={userLogin}
+                setUserLogin={setUserLogin}
+              />
             ) : (
               <Registration
                 userData={userData}
