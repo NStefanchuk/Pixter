@@ -5,9 +5,15 @@ import Styles from '../styles/modal.module.css'
 interface ModalProps {
   children: ReactNode
   isOpen: boolean
+  handleCloseModal: () => void
 }
 
-const Modal = ({ children, isOpen }: ModalProps) => {
+const Modal = ({ children, isOpen, handleCloseModal }: ModalProps) => {
+  const handleModalOverlayClose = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.currentTarget === e.target) {
+      handleCloseModal()
+    }
+  }
   if (!isOpen) return null
   const modalElement = document.getElementById('modal')
   if (!modalElement) {
@@ -15,7 +21,12 @@ const Modal = ({ children, isOpen }: ModalProps) => {
     return null
   }
   return createPortal(
-    <div role="dialog" aria-modal="true" className={Styles.overlay}>
+    <div
+      onClick={handleModalOverlayClose}
+      role="dialog"
+      aria-modal="true"
+      className={Styles.overlay}
+    >
       <div className={Styles.content}>{children}</div>
     </div>,
     modalElement
