@@ -1,7 +1,7 @@
 import Styles from '../styles/profile.module.css'
 
 interface PostProps {
-  id: string
+  id: number | string
   imageUrl: string
   description?: string
   location?: string

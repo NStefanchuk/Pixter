@@ -88,15 +88,15 @@ const Profile = () => {
       e.preventDefault()
 
       const formData = new FormData(e.currentTarget)
-      const imageUrl = (formData.get('imageUrl') ?? '').toString().trim()
-      const description = (formData.get('description') ?? '').toString().trim()
-      const location = (formData.get('location') ?? '').toString().trim()
+      const formImageUrl = (formData.get('imageUrl') ?? '').toString().trim()
+      const formDescription = (formData.get('description') ?? '').toString().trim()
+      const formLocation = (formData.get('location') ?? '').toString().trim()
 
       const newPost = {
         userId: storedUserId,
-        imageUrl: imageUrl,
-        description: description,
-        location: location,
+        imageUrl: formImageUrl,
+        description: formDescription,
+        location: formLocation,
         createdAt: new Date().toISOString(),
       }
 
@@ -250,7 +250,7 @@ const Profile = () => {
               <button
                 type="submit"
                 className={ModalStyles.primaryBtn}
-                disabled={imageUrl.trim() === ''}
+                disabled={isSubmitting || imageUrl.trim() === ''}
               >
                 Add
               </button>
