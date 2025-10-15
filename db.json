@@ -17,6 +17,15 @@
       "location": "Kyiv, UA",
       "createdAt": "2025-10-11T09:00:00.000Z",
       "likes": 0
+    },
+    {
+      "id": "p_0003",
+      "userId": "u_9f2a",
+      "imageUrl": "https://lizputnam.com/wp-content/uploads/2022/04/what-to-wear-for-extended-family-photos-2.jpg",
+      "description": "With my family",
+      "location": "Kyiv, UA",
+      "createdAt": "2025-10-15T09:00:00.000Z",
+      "likes": 0
     }
   ],
   "comments": [],

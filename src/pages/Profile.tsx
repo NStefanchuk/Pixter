@@ -5,11 +5,19 @@ import Modal from '../components/Modal'
 import ModalStyles from '../styles/modal.module.css'
 import PostTile from '../components/PostTile'
 
+interface Post {
+  id: string
+  imageUrl: string
+  description?: string
+  location?: string
+  createdAt?: string
+}
+
 const Profile = () => {
   const navigate = useNavigate()
   const [user, setUser] = useState<any>(null)
   const [isOpen, setIsOpen] = useState(false)
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState<Post[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
   const storedUserId =
@@ -41,7 +49,7 @@ const Profile = () => {
     ;(async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/posts?userId=${storedUserId}`
+          `http://localhost:3000/posts?userId=${storedUserId}&_sort=createdAt&_order=desc`
         )
         const data = await res.json()
         if (!ignore) setPosts(data)
@@ -124,15 +132,21 @@ const Profile = () => {
             </div>
           </div>
           <section className={Styles.profilePosts}>
-            {posts.map((post) => (
-              <PostTile
-                key={post.id}
-                id={post.id}
-                imageUrl={post.imageUrl}
-                description={post.description}
-                location={post.location}
-              />
-            ))}
+            {isLoading ? (
+              <p>«Loading…»</p>
+            ) : posts.length === 0 ? (
+              <p>«No posts yet»</p>
+            ) : (
+              posts.map((post) => (
+                <PostTile
+                  key={post.id}
+                  id={post.id}
+                  imageUrl={post.imageUrl}
+                  description={post.description}
+                  location={post.location}
+                />
+              ))
+            )}
           </section>
         </div>
       </div>
