@@ -26,6 +26,14 @@
       "location": "Kyiv, UA",
       "createdAt": "2025-10-15T09:00:00.000Z",
       "likes": 0
+    },
+    {
+      "id": "de21",
+      "userId": "u_9f2a",
+      "imageUrl": "https://c02.purpledshub.com/uploads/sites/40/2023/08/JI230816Cosmos220-6d9254f-edited-scaled.jpg?w=1029&webp=1",
+      "description": "Flowers",
+      "location": "Netherlands",
+      "createdAt": "2025-10-15T11:47:53.246Z"
     }
   ],
   "comments": [],

@@ -6,7 +6,7 @@ import ModalStyles from '../styles/modal.module.css'
 import PostTile from '../components/PostTile'
 
 interface Post {
-  id: string
+  id: number | string
   imageUrl: string
   description?: string
   location?: string
@@ -17,8 +17,10 @@ const Profile = () => {
   const navigate = useNavigate()
   const [user, setUser] = useState<any>(null)
   const [isOpen, setIsOpen] = useState(false)
+  const [imageUrl, setImageUrl] = useState('')
   const [posts, setPosts] = useState<Post[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const storedUserId =
     JSON.parse(localStorage.getItem('pixter:user') || 'null')?.id ?? null
@@ -75,6 +77,49 @@ const Profile = () => {
 
   const handleCloseModal = () => {
     setIsOpen(false)
+  }
+
+  const handleImageUrl = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImageUrl(e.target.value)
+  }
+
+  const handlePostImage = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault()
+
+      const formData = new FormData(e.currentTarget)
+      const imageUrl = (formData.get('imageUrl') ?? '').toString().trim()
+      const description = (formData.get('description') ?? '').toString().trim()
+      const location = (formData.get('location') ?? '').toString().trim()
+
+      const newPost = {
+        userId: storedUserId,
+        imageUrl: imageUrl,
+        description: description,
+        location: location,
+        createdAt: new Date().toISOString(),
+      }
+
+      setIsSubmitting(true)
+      const submitData = await fetch('http://localhost:3000/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newPost),
+      })
+      const res = await submitData.json()
+      const req = await fetch(
+        `http://localhost:3000/posts?userId=${storedUserId}`
+      )
+      const data = await req.json()
+      setPosts(data)
+      handleCloseModal()
+      e.currentTarget.reset()
+      setImageUrl('')
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -153,53 +198,64 @@ const Profile = () => {
 
       {isOpen && (
         <Modal isOpen={isOpen} handleCloseModal={handleCloseModal}>
-          <div className={ModalStyles.formRow}>
-            <label className={ModalStyles.label} htmlFor="imageUrl">
-              Image URL *
-            </label>
-            <input
-              id="imageUrl"
-              name="imageUrl"
-              type="url"
-              placeholder="https://example.com/photo.jpg"
-              className={ModalStyles.input}
-            />
-          </div>
+          <form onSubmit={handlePostImage}>
+            <div className={ModalStyles.formRow}>
+              <label className={ModalStyles.label} htmlFor="imageUrl">
+                Image URL *
+              </label>
+              <input
+                id="imageUrl"
+                name="imageUrl"
+                value={imageUrl}
+                type="url"
+                placeholder="https://example.com/photo.jpg"
+                className={ModalStyles.input}
+                onChange={handleImageUrl}
+              />
+            </div>
 
-          <div className={ModalStyles.formRow}>
-            <label className={ModalStyles.label} htmlFor="description">
-              Description (optional)
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              placeholder="Add a short description…"
-              className={ModalStyles.textarea}
-            />
-          </div>
+            <div className={ModalStyles.formRow}>
+              <label className={ModalStyles.label} htmlFor="description">
+                Description (optional)
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                placeholder="Add a short description…"
+                className={ModalStyles.textarea}
+              />
+            </div>
 
-          <div className={ModalStyles.formRow}>
-            <label className={ModalStyles.label} htmlFor="location">
-              Location (optional)
-            </label>
-            <input
-              id="location"
-              name="location"
-              type="text"
-              placeholder="City, place…"
-              className={ModalStyles.input}
-            />
-          </div>
+            <div className={ModalStyles.formRow}>
+              <label className={ModalStyles.label} htmlFor="location">
+                Location (optional)
+              </label>
+              <input
+                id="location"
+                name="location"
+                type="text"
+                placeholder="City, place…"
+                className={ModalStyles.input}
+              />
+            </div>
 
-          <div className={ModalStyles.actions}>
-            <button
-              className={ModalStyles.secondaryBtn}
-              onClick={handleCloseModal}
-            >
-              Close
-            </button>
-            <button className={ModalStyles.primaryBtn}>Add</button>
-          </div>
+            <div className={ModalStyles.actions}>
+              <button
+                className={ModalStyles.secondaryBtn}
+                onClick={handleCloseModal}
+                type="button"
+              >
+                Close
+              </button>
+              <button
+                type="submit"
+                className={ModalStyles.primaryBtn}
+                disabled={imageUrl.trim() === ''}
+              >
+                Add
+              </button>
+            </div>
+          </form>
         </Modal>
       )}
     </>

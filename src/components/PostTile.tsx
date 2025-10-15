@@ -7,10 +7,17 @@ interface PostProps {
   location?: string
 }
 
-const PostTile = ({id, imageUrl, description, location}:PostProps) => {
-  return <div className={Styles.postTile}>
-    <img className={Styles.postImg} src={imageUrl} alt={description || 'Photo'} loading="lazy" />
-  </div>
+const PostTile = ({ id, imageUrl, description, location }: PostProps) => {
+  return (
+    <div className={Styles.postTile}>
+      <img
+        className={Styles.postImg}
+        src={imageUrl}
+        alt={description || 'Photo'}
+        loading="lazy"
+      />
+    </div>
+  )
 }
 
 export default PostTile
