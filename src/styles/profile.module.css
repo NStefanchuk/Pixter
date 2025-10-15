@@ -201,7 +201,50 @@
   }
 
   .profilePosts {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;                       
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 16px;                      
+  }
+
+  @media (max-width: 1024px) {
+  .profilePosts {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
+
+/* мобильный */
+@media (max-width: 640px) {
+  .profilePosts {
+    grid-template-columns: 1fr;
+  }
+}
+}
+
+/* Плитка поста — квадратный холдер */
+.postTile {
+  position: relative;
+  aspect-ratio: 1 / 1;     /* квадрат */
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f1f5f9;     /* серый фон-заглушка пока грузится фото */
+}
+
+/* Картинка внутри плитки */
+.postImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;        /* обрезаем по краям, чтобы заполнить квадрат */
+  display: block;
+}
+
+/* Наведение/фокус — лёгкий эффект */
+.postTile:hover .postImg { transform: scale(1.01); }
+.postImg { transition: transform 120ms ease-out; }
+
+/* Доступность: видимый фокус при таб-навигации, если плитка кликабельна (ссылка/кнопка) */
+.postTile:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+

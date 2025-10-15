@@ -1,5 +1,24 @@
 {
-  "posts": [],
+  "posts": [
+    {
+      "id": "p_0001",
+      "userId": "u_9f2a",
+      "imageUrl": "https://pikwizard.com/pw/medium/913f7533aba05a5c203d2d5ff17b75bc.jpg",
+      "description": "Morning coffee",
+      "location": "Kyiv, UA",
+      "createdAt": "2025-10-10T09:00:00.000Z",
+      "likes": 0
+    },
+    {
+      "id": "p_0002",
+      "userId": "u_9f2a",
+      "imageUrl": "https://www.helpguide.org/wp-content/uploads/2023/02/Health-Benefits-of-Walks-with-Your-Dog.jpeg",
+      "description": "Walking my dog",
+      "location": "Kyiv, UA",
+      "createdAt": "2025-10-11T09:00:00.000Z",
+      "likes": 0
+    }
+  ],
   "comments": [],
   "users": [
     {

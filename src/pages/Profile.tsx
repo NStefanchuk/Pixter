@@ -3,11 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import Styles from '../styles/profile.module.css'
 import Modal from '../components/Modal'
 import ModalStyles from '../styles/modal.module.css'
+import PostTile from '../components/PostTile'
 
 const Profile = () => {
   const navigate = useNavigate()
   const [user, setUser] = useState<any>(null)
   const [isOpen, setIsOpen] = useState(false)
+  const [posts, setPosts] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+
   const storedUserId =
     JSON.parse(localStorage.getItem('pixter:user') || 'null')?.id ?? null
 
@@ -30,6 +34,27 @@ const Profile = () => {
       ignore = true
     }
   }, [storedUserId, navigate])
+
+  useEffect(() => {
+    setIsLoading(true)
+    let ignore = false
+    ;(async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/posts?userId=${storedUserId}`
+        )
+        const data = await res.json()
+        if (!ignore) setPosts(data)
+      } catch (e) {
+        console.error(e)
+      } finally {
+        setIsLoading(false)
+      }
+    })()
+    return () => {
+      ignore = true
+    }
+  }, [storedUserId])
 
   const handleLogout = () => {
     localStorage.removeItem('pixter:user')
@@ -98,7 +123,17 @@ const Profile = () => {
               </div>
             </div>
           </div>
-          <section className={Styles.profilePosts}></section>
+          <section className={Styles.profilePosts}>
+            {posts.map((post) => (
+              <PostTile
+                key={post.id}
+                id={post.id}
+                imageUrl={post.imageUrl}
+                description={post.description}
+                location={post.location}
+              />
+            ))}
+          </section>
         </div>
       </div>
 
