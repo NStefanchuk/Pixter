@@ -6,10 +6,15 @@ interface ModalProps {
   children: ReactNode
   isOpen: boolean
   handleCloseModal: () => void
+  contentClassName?: string
 }
 
-const Modal = ({ children, isOpen, handleCloseModal }: ModalProps) => {
-
+const Modal = ({
+  children,
+  isOpen,
+  handleCloseModal,
+  contentClassName,
+}: ModalProps) => {
   useEffect(() => {
     if (!isOpen) return
     const onKeyDown = (e: KeyboardEvent) => {
@@ -37,7 +42,12 @@ const Modal = ({ children, isOpen, handleCloseModal }: ModalProps) => {
       aria-modal="true"
       className={Styles.overlay}
     >
-      <div className={Styles.content}>{children}</div>
+      <div
+        className={`${Styles.content} ${contentClassName ?? ''}`}
+        role="document"
+      >
+        {children}
+      </div>
     </div>,
     modalElement
   )
