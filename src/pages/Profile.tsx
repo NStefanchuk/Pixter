@@ -5,6 +5,7 @@ import Modal from '../components/Modal'
 import ModalStyles from '../styles/modal.module.css'
 import PostTile from '../components/PostTile'
 import type { Post } from '../utils/types'
+import { getUser, STORED_USER_ID } from '../utils/api'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -15,28 +16,17 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const storedUserId =
-    JSON.parse(localStorage.getItem('pixter:user') || 'null')?.id ?? null
- 
   useEffect(() => {
-    if (!storedUserId) {
+    if (!STORED_USER_ID) {
       navigate('/auth')
       return
     }
-    let ignore = false
-    ;(async () => {
-      try {
-        const res = await fetch(`http://localhost:3000/users/${storedUserId}`)
-        const data = await res.json()
-        if (!ignore) setUser(data)
-      } catch (e) {
-        console.error(e)
-      }
-    })()
-    return () => {
-      ignore = true
+    const getUserData = async () => {
+      const userData = await getUser()
+      setUser(userData)
     }
-  }, [storedUserId, navigate])
+    getUserData()
+  }, [STORED_USER_ID, navigate])
 
   useEffect(() => {
     setIsLoading(true)
@@ -44,7 +34,7 @@ const Profile = () => {
     ;(async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/posts?userId=${storedUserId}`
+          `http://localhost:3000/posts?userId=${STORED_USER_ID}`
         )
         const data = await res.json()
         if (!ignore) setPosts(data)
@@ -57,7 +47,7 @@ const Profile = () => {
     return () => {
       ignore = true
     }
-  }, [storedUserId])
+  }, [STORED_USER_ID])
 
   const handleLogout = () => {
     localStorage.removeItem('pixter:user')
@@ -88,7 +78,7 @@ const Profile = () => {
       const formLocation = (formData.get('location') ?? '').toString().trim()
 
       const newPost = {
-        userId: storedUserId,
+        userId: STORED_USER_ID,
         imageUrl: formImageUrl,
         description: formDescription,
         location: formLocation,
@@ -103,7 +93,7 @@ const Profile = () => {
       })
       const res = await submitData.json()
       const req = await fetch(
-        `http://localhost:3000/posts?userId=${storedUserId}`
+        `http://localhost:3000/posts?userId=${STORED_USER_ID}`
       )
       const data = await req.json()
       setPosts(data)
