@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import Styles from '../styles/modal.module.css'
 
@@ -9,6 +9,16 @@ interface ModalProps {
 }
 
 const Modal = ({ children, isOpen, handleCloseModal }: ModalProps) => {
+
+  useEffect(() => {
+    if (!isOpen) return
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleCloseModal()
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [isOpen, handleCloseModal])
+
   const handleModalOverlayClose = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.currentTarget === e.target) {
       handleCloseModal()
