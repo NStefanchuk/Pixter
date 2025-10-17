@@ -4,14 +4,7 @@ import Styles from '../styles/profile.module.css'
 import Modal from '../components/Modal'
 import ModalStyles from '../styles/modal.module.css'
 import PostTile from '../components/PostTile'
-
-interface Post {
-  id: number | string
-  imageUrl: string
-  description?: string
-  location?: string
-  createdAt?: string
-}
+import type { Post } from '../utils/types'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -24,7 +17,7 @@ const Profile = () => {
 
   const storedUserId =
     JSON.parse(localStorage.getItem('pixter:user') || 'null')?.id ?? null
-
+ 
   useEffect(() => {
     if (!storedUserId) {
       navigate('/auth')
@@ -51,7 +44,7 @@ const Profile = () => {
     ;(async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/posts?userId=${storedUserId}&_sort=createdAt&_order=desc`
+          `http://localhost:3000/posts?userId=${storedUserId}`
         )
         const data = await res.json()
         if (!ignore) setPosts(data)
@@ -89,7 +82,9 @@ const Profile = () => {
 
       const formData = new FormData(e.currentTarget)
       const formImageUrl = (formData.get('imageUrl') ?? '').toString().trim()
-      const formDescription = (formData.get('description') ?? '').toString().trim()
+      const formDescription = (formData.get('description') ?? '')
+        .toString()
+        .trim()
       const formLocation = (formData.get('location') ?? '').toString().trim()
 
       const newPost = {

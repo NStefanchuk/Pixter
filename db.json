@@ -34,6 +34,14 @@
       "description": "Flowers",
       "location": "Netherlands",
       "createdAt": "2025-10-15T11:47:53.246Z"
+    },
+    {
+      "id": "13cb",
+      "userId": "u_9f2a",
+      "imageUrl": "https://www.cdc.gov/healthy-pets/media/images/2024/04/Cat-on-couch.jpg",
+      "description": "My cat",
+      "location": "Russia",
+      "createdAt": "2025-10-15T19:14:38.615Z"
     }
   ],
   "comments": [],
