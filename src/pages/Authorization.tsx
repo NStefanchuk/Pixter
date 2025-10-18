@@ -4,6 +4,7 @@ import Registration from '../components/Registration'
 import Styles from '../styles/auth.module.css'
 import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import logoUrl from '../assets/logo.png' 
 
 const Authorization = () => {
   const navigate = useNavigate()
@@ -27,7 +28,7 @@ const Authorization = () => {
       switchAction: 'Sign up',
     },
     register: {
-      title: 'Create your Pixter account',
+      title: 'Create your account',
       subtitle: 'Join the community and start sharing',
       switchQuestion: 'Already have an account?',
       switchAction: 'Sign in',
@@ -108,7 +109,7 @@ const Authorization = () => {
       <div className={Styles.authPage}>
         <div className={Styles.authCard}>
           <div className={Styles.authHeader}>
-            <div className={Styles.authLogo} />
+            <img src={logoUrl} alt="Logo" className={Styles.authLogoImg} />
             <h1 className={Styles.authTitle}>{text.title}</h1>
             <p className={Styles.authSubtitle}>{text.subtitle}</p>
           </div>

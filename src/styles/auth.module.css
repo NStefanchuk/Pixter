@@ -25,11 +25,11 @@
   gap: 4px;
 }
 
-.authLogo {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+.authLogoImg {
+  height: 56px;
+  width: auto;
+  display: block;
+  margin: 0 auto 12px;
 }
 
 .authTitle {

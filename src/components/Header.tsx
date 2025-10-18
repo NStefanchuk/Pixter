@@ -5,7 +5,7 @@ import logo from '../assets/logo.png'
 const Header = () => {
   return (
     <header className={styles.header}>
-      <Link to="/" className={styles.logoLink}>
+      <Link to="/feed" className={styles.logoLink}>
         <span className={styles.logoWrapper}>
           <img src={logo} alt="Pixter logo" className={styles.logo} />
         </span>
