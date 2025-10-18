@@ -11,8 +11,7 @@ const Header = () => {
         </span>
       </Link>
       <nav className={styles.nav}>
-        <Link to="/">Home</Link>
-        <Link to="/profile/u_9f2a">Profile</Link>
+        <Link to="/profile">Profile</Link>
       </nav>
     </header>
   )

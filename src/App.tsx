@@ -5,13 +5,15 @@ import { Toaster } from 'react-hot-toast'
 import Profile from './pages/Profile'
 import Main from './pages/Main'
 import Header from './components/Header'
+import Welcome from './pages/Welcome'
 
 function App() {
   return (
     <>
-    <Header />
+      <Header />
       <Routes>
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<Welcome />} />
+        <Route path="/feed" element={<Main />} />
         <Route path="/auth" element={<Authorization />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
