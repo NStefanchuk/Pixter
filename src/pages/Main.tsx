@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
 import { getPosts, getUsers } from '../utils/api'
 import { type Post, type User } from '../utils/types'
+import styles from '../styles/feed.module.css'
 
 const Main = () => {
   const [users, setUsers] = useState<User[]>([])
   const [posts, setPosts] = useState<Post[]>([])
+
+  const usersById = new Map(users.map((u) => [u.id, u]))
 
   useEffect(() => {
     const getMainData = async () => {
@@ -15,8 +18,46 @@ const Main = () => {
     getMainData()
   }, [])
 
+  return (
+    <div className={styles.feed}>
+      {posts.map((post) => {
+        const author = usersById.get(post.userId)
+        return (
+          <article className={styles.post} key={post.id}>
+            <header className={styles.header}>
+              <img
+                className={styles.avatar}
+                src={author?.avatarUrl}
+                alt={author?.username || 'User'}
+              />
+              <span className={styles.username}>
+                {author?.username || 'Unknown'}
+              </span>
+            </header>
+            {post.location && (
+              <p className={styles.location}>{post.location}</p>
+            )}
 
-  return <div></div>
+            <time className={styles.date} dateTime={post.createdAt}>
+              {new Date(post.createdAt).toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+              })}
+            </time>
+            <img
+              className={styles.photo}
+              src={post.imageUrl}
+              alt={post.description || 'Post image'}
+            />
+
+            {post.description && (
+              <p className={styles.desc}>{post.description}</p>
+            )}
+          </article>
+        )
+      })}
+    </div>
+  )
 }
-
 export default Main
