@@ -4,10 +4,12 @@ import Authorization from './pages/Authorization'
 import { Toaster } from 'react-hot-toast'
 import Profile from './pages/Profile'
 import Main from './pages/Main'
+import Header from './components/Header'
 
 function App() {
   return (
     <>
+    <Header />
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/auth" element={<Authorization />} />
