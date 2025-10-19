@@ -2,7 +2,7 @@ import { type Comment, type User } from '../utils/types'
 
 interface CommentsProps {
   postComments: Comment[]
-  usersById: Map<string, User>
+  usersById: Map<User['id'], User>
 }
 
 const Comments = ({ postComments, usersById }: CommentsProps) => {
@@ -17,6 +17,5 @@ const Comments = ({ postComments, usersById }: CommentsProps) => {
     </div>
   )
 }
-
 
 export default Comments

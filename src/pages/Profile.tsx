@@ -17,7 +17,7 @@ const Profile = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
-    console.log(STORED_USER_ID);
+    console.log(STORED_USER_ID)
     if (!STORED_USER_ID) {
       navigate('/auth')
       return

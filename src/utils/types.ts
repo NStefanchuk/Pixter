@@ -1,13 +1,14 @@
 export type Post = {
-  id: number | string
+  id: string
   imageUrl: string
+  userId: string
   description?: string
   location?: string
   createdAt?: string
 }
 
 export type User = {
-  id: number | string
+  id: string
   username: string
   email: string
   password: string
@@ -19,9 +20,9 @@ export type User = {
 }
 
 export type Comment = {
-  id: number | string
-  postId: number | string
-  userId: number | string
+  id: string
+  postId: string
+  userId: string
   content: string
   createdAt: string
 }

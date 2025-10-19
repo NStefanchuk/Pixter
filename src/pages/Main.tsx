@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { getComments, getPosts, getUsers } from '../utils/api'
 import { type Post, type User, type Comment } from '../utils/types'
 import styles from '../styles/feed.module.css'
@@ -9,25 +9,28 @@ const Main = () => {
   const [posts, setPosts] = useState<Post[]>([])
   const [comments, setComments] = useState<Comment[]>([])
 
-  const usersById = new Map<User['id'], User>(users.map((u) => [u.id, u]))
+  const usersById = useMemo(
+    () => new Map<User['id'], User>(users.map((u) => [u.id, u])),
+    [users]
+  )
 
-  const commentsByPostId = comments.reduce((acc, el) => {
-    if (Object.hasOwn(acc, el.postId)) {
-      acc[el.postId].push(el)
-    } else {
-      acc[el.postId] = [el]
+  const commentsByPostId = useMemo(() => {
+    const acc: Record<string, Comment[]> = {}
+    for (const c of comments) {
+      const key = c.postId
+      if (!key) continue
+      if (acc[key]) acc[key].push(c)
+      else acc[key] = [c]
     }
     return acc
-  }, {})
-  console.log(commentsByPostId)
+  }, [comments])
 
-  console.log(usersById)
   useEffect(() => {
     const getMainData = async () => {
       const [usersData, postsData, commentsData] = await Promise.all([
-        getUsers(),
-        getPosts(),
-        getComments(),
+        getUsers() as Promise<User[]>,
+        getPosts() as Promise<Post[]>,
+        getComments() as Promise<Comment[]>,
       ])
       setUsers(usersData)
       setPosts(postsData)
@@ -39,8 +42,12 @@ const Main = () => {
   return (
     <div className={styles.feed}>
       {posts.map((post) => {
-        const author = usersById.get(post.userId)
-        const postComments = commentsByPostId[post.id] || []
+        const author = usersById.get(String(post.userId))
+        
+        const postComments =
+          (post.id ? commentsByPostId[post.id] : undefined) ?? []
+
+        const createdAt = post.createdAt ? new Date(post.createdAt) : null
 
         return (
           <article className={styles.post} key={post.id}>
@@ -54,17 +61,21 @@ const Main = () => {
                 {author?.username || 'Unknown'}
               </span>
             </header>
+
             {post.location && (
               <p className={styles.location}>{post.location}</p>
             )}
 
-            <time className={styles.date} dateTime={post.createdAt}>
-              {new Date(post.createdAt).toLocaleDateString('en-GB', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric',
-              })}
-            </time>
+            {createdAt && (
+              <time className={styles.date} dateTime={createdAt.toISOString()}>
+                {createdAt.toLocaleDateString('en-GB', {
+                  day: '2-digit',
+                  month: 'short',
+                  year: 'numeric',
+                })}
+              </time>
+            )}
+
             <img
               className={styles.photo}
               src={post.imageUrl}
@@ -74,6 +85,7 @@ const Main = () => {
             {post.description && (
               <p className={styles.desc}>{post.description}</p>
             )}
+
             <div>
               <Comments postComments={postComments} usersById={usersById} />
             </div>
@@ -83,4 +95,5 @@ const Main = () => {
     </div>
   )
 }
+
 export default Main
