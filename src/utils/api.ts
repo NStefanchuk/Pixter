@@ -30,3 +30,13 @@ export const getPosts = async () => {
     console.error(e)
   }
 }
+
+export const getComments = async () => {
+  try {
+    const res = await fetch(`http://localhost:3000/comments`)
+    const data = await res.json()
+    return data
+  } catch (e) {
+    console.error(e)
+  }
+}

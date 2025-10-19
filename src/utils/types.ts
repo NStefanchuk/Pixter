@@ -1,4 +1,4 @@
-export interface Post {
+export type Post = {
   id: number | string
   imageUrl: string
   description?: string
@@ -6,7 +6,7 @@ export interface Post {
   createdAt?: string
 }
 
-export interface User {
+export type User = {
   id: number | string
   username: string
   email: string
@@ -15,4 +15,13 @@ export interface User {
   followers: number
   following: number
   posts: number
+  avatarUrl?: string
+}
+
+export type Comment = {
+  id: number | string
+  postId: number | string
+  userId: number | string
+  content: string
+  createdAt: string
 }

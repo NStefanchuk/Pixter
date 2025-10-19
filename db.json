@@ -44,7 +44,50 @@
       "createdAt": "2025-10-15T19:14:38.615Z"
     }
   ],
-  "comments": [],
+"comments": [
+  {
+    "id": "c_0001",
+    "postId": "p_0001",
+    "userId": "b6ad",
+    "content": "That coffee looks amazing! ☕",
+    "createdAt": "2025-10-10T09:30:00.000Z"
+  },
+    {
+    "id": "c_0006",
+    "postId": "p_0001",
+    "userId": "b6ad",
+    "content": "But I hate coffee",
+    "createdAt": "2025-10-10T09:30:00.000Z"
+  },
+  {
+    "id": "c_0002",
+    "postId": "p_0002",
+    "userId": "u_9f2a",
+    "content": "Best way to start the weekend 😎",
+    "createdAt": "2025-10-11T09:30:00.000Z"
+  },
+  {
+    "id": "c_0003",
+    "postId": "p_0003",
+    "userId": "b6ad",
+    "content": "Beautiful family portrait!",
+    "createdAt": "2025-10-15T09:30:00.000Z"
+  },
+  {
+    "id": "c_0004",
+    "postId": "de21",
+    "userId": "b6ad",
+    "content": "Love these flowers 🌸 great colors!",
+    "createdAt": "2025-10-15T11:55:00.000Z"
+  },
+  {
+    "id": "c_0005",
+    "postId": "13cb",
+    "userId": "u_9f2a",
+    "content": "Such a cute cat 🐱",
+    "createdAt": "2025-10-15T19:30:00.000Z"
+  }
+],
   "users": [
     {
       "id": "u_9f2a",

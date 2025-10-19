@@ -1,19 +1,35 @@
 import { useEffect, useState } from 'react'
-import { getPosts, getUsers } from '../utils/api'
-import { type Post, type User } from '../utils/types'
+import { getComments, getPosts, getUsers } from '../utils/api'
+import { type Post, type User, type Comment } from '../utils/types'
 import styles from '../styles/feed.module.css'
 
 const Main = () => {
   const [users, setUsers] = useState<User[]>([])
   const [posts, setPosts] = useState<Post[]>([])
+  const [comments, setComments] = useState<Comment[]>([])
 
   const usersById = new Map(users.map((u) => [u.id, u]))
+  const commentsByPostId = comments.reduce((acc, el) => {
+    if (Object.hasOwn(acc, el.postId)) {
+      acc[el.postId].push(el)
+    } else {
+      acc[el.postId] = [el]
+    }
+    return acc
+  }, {})
+  console.log(commentsByPostId)
 
+  console.log(usersById)
   useEffect(() => {
     const getMainData = async () => {
-      const [usersData, postsData] = await Promise.all([getUsers(), getPosts()])
+      const [usersData, postsData, commentsData] = await Promise.all([
+        getUsers(),
+        getPosts(),
+        getComments(),
+      ])
       setUsers(usersData)
       setPosts(postsData)
+      setComments(commentsData)
     }
     getMainData()
   }, [])
@@ -54,6 +70,9 @@ const Main = () => {
             {post.description && (
               <p className={styles.desc}>{post.description}</p>
             )}
+            <div>
+              <p>{}</p>
+            </div>
           </article>
         )
       })}
