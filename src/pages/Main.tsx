@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react'
 import { getComments, getPosts, getUsers } from '../utils/api'
 import { type Post, type User, type Comment } from '../utils/types'
 import styles from '../styles/feed.module.css'
+import Comments from '../components/Comments'
 
 const Main = () => {
   const [users, setUsers] = useState<User[]>([])
   const [posts, setPosts] = useState<Post[]>([])
   const [comments, setComments] = useState<Comment[]>([])
 
-  const usersById = new Map(users.map((u) => [u.id, u]))
+  const usersById = new Map<User['id'], User>(users.map((u) => [u.id, u]))
+
   const commentsByPostId = comments.reduce((acc, el) => {
     if (Object.hasOwn(acc, el.postId)) {
       acc[el.postId].push(el)
@@ -38,6 +40,8 @@ const Main = () => {
     <div className={styles.feed}>
       {posts.map((post) => {
         const author = usersById.get(post.userId)
+        const postComments = commentsByPostId[post.id] || []
+
         return (
           <article className={styles.post} key={post.id}>
             <header className={styles.header}>
@@ -71,7 +75,7 @@ const Main = () => {
               <p className={styles.desc}>{post.description}</p>
             )}
             <div>
-              <p>{}</p>
+              <Comments postComments={postComments} usersById={usersById} />
             </div>
           </article>
         )
