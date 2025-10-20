@@ -24,6 +24,14 @@ const Modal = ({
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [isOpen, handleCloseModal])
 
+  useEffect(() => {
+    const prev = document.body.style.overflow
+    if (isOpen) document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [isOpen])
+
   const handleModalOverlayClose = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.currentTarget === e.target) {
       handleCloseModal()

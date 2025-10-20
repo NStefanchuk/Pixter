@@ -1,131 +1,107 @@
-/* применим ТОЛЬКО в модалке поста */
+/* Модалка поста — чистый вариант со скруглением по краям */
 .contentFit {
   display: flex;
-  align-items: center;
   justify-content: center;
-  max-height: 90vh;
-  overflow: hidden;
+  align-items: center;
   padding: 0;
 }
 
-/* Контейнер модалки */
 .wrapper {
-  display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 1rem;
-  width: min(96vw, 1000px);
-  max-height: 80vh;
-  background: var(--bg, #fff);
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-/* Левая часть — фото */
-.media {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-}
-
-.postImg {
-  max-width: 100%;
-  max-height: 90vh;
-  object-fit: contain;
-}
-
-/* Правая часть — панель с инфо */
-.sidebar {
+  width: min(95vw, 600px);
+  height: min(90vh, 800px);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 1rem;
-  overflow-y: auto;
   background: #fff;
+  border-radius: 20px;
+  overflow: hidden;   /* ← обрезает фото по скруглению */
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
 }
 
-/* Верхний блок (крестик, автор, дата) */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
+.media {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;   /* ← на всякий случай */
+}
+
+
+
+.postImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.postImg:hover {
+  transform: scale(1.02);
 }
 
 .closeBtn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+
   border: none;
-  background: transparent;
-  font-size: 1.5rem;
-  cursor: pointer;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.4rem;
   line-height: 1;
-  color: #333;
+  cursor: pointer;
+  color: #222;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-/* Описание и локация */
+.closeBtn:hover {
+  background: #fff;
+  color: #000;
+}
+
+.sidebar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: #fff;
+  padding: 1rem 1.25rem;
+}
+
 .desc {
-  margin-bottom: 0.5rem;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: #222;
+  margin-bottom: 0.4rem;
 }
 
 .location {
-  margin-bottom: 1rem;
   font-size: 0.9rem;
   color: #666;
+  margin-bottom: 0.8rem;
 }
 
-/* Комментарии */
-.comments {
-  flex: 1;
-  overflow-y: auto;
-  border-top: 1px solid #eee;
-  padding-top: 0.75rem;
-}
 
-.list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0;
-  margin: 0;
-}
-
-.comment {
-  line-height: 1.4;
-  font-size: 0.9rem;
-}
-
-.author {
-  font-weight: 600;
-  margin-right: 4px;
-}
-
-.text {
-  color: #333;
-}
-
-.time {
-  display: block;
-  font-size: 0.8rem;
-  color: #888;
-}
-
-/* Когда нет комментариев */
-.empty {
-  font-size: 0.9rem;
-  color: #777;
-  text-align: center;
-  padding: 1rem 0;
-}
-
-/* Адаптив для мобилок */
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .wrapper {
-    grid-template-columns: 1fr;
-    max-height: 80vh;
+    width: 94vw;
+    height: 90vh;
+    border-radius: 16px;
   }
-  .sidebar {
-    max-height: 40vh;
+
+  .closeBtn {
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    font-size: 1.2rem;
   }
+}
+
+.contentFit {
+  overflow: visible !important;
+  max-height: none !important;
+  padding: 0 !important;
 }

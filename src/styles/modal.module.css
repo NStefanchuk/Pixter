@@ -94,3 +94,17 @@
 @media (max-width: 480px) {
   .content { padding: 16px; border-radius: 12px; }
 }
+
+/* override только для карточки поста */
+.contentFit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* ВАЖНО: контейнер модалки сам не скроллится за края и обрезает содержимое */
+  overflow: hidden !important;
+  max-height: 90vh !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+}
+
