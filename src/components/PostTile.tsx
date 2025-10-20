@@ -81,7 +81,7 @@ const PostTile = ({
                 <p className={postModalStyles.location}>{location}</p>
               )}
 
-              <Comments postComments={postComments} usersById={usersById} postId={id}/>
+              <Comments postComments={postComments} usersById={usersById} postId={id} className={postModalStyles.commentsInModal}/>
             </aside>
           </div>
         </Modal>

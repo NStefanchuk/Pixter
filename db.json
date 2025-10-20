@@ -234,6 +234,20 @@
       "userId": "b6ad",
       "content": "привте",
       "createdAt": "2025-10-20T20:05:52.157Z"
+    },
+    {
+      "id": "7bf4",
+      "postId": "ab17",
+      "userId": "b6ad",
+      "content": "епт",
+      "createdAt": "2025-10-20T20:11:08.988Z"
+    },
+    {
+      "id": "0fe7",
+      "postId": "p_0003",
+      "userId": "b6ad",
+      "content": "test",
+      "createdAt": "2025-10-20T20:17:06.353Z"
     }
   ],
   "users": [

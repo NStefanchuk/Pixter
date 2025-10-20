@@ -1,5 +1,5 @@
 // src/components/Comments.tsx
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { type Comment, type User } from '../utils/types'
 import c from '../styles/comments.module.css'
 import { createComment, STORED_USER_ID } from '../utils/api'
@@ -9,6 +9,7 @@ interface CommentsProps {
   usersById: Map<User['id'], User>
   visibleCount?: number
   onShowAll?: () => void
+  className?: string
   postId: string
 }
 
@@ -17,12 +18,18 @@ const Comments = ({
   usersById,
   visibleCount = 2,
   onShowAll,
+  className = '',
   postId,
 }: CommentsProps) => {
   const [expanded, setExpanded] = useState(false)
   const [newContent, setNewContent] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [comments, setComments] = useState(postComments)
+
+  useEffect(() => {
+    setComments(postComments)
+    setExpanded(false)
+  }, [postComments])
 
   const handleShowAll = () => {
     if (onShowAll) onShowAll()
@@ -32,15 +39,15 @@ const Comments = ({
   const list = expanded ? comments : comments.slice(0, visibleCount)
 
   return (
-    <div className={c.comments}>
-      {!expanded && postComments.length > visibleCount && (
+    <div className={`${c.comments} ${className}`}>
+      {!expanded && comments.length > visibleCount && (
         <button
           type="button"
           className={c.showAll}
           onClick={handleShowAll}
           aria-label={`Show all ${postComments.length} comments`}
         >
-          Show all {postComments.length} comments
+          Show all {comments.length} comments
         </button>
       )}
 

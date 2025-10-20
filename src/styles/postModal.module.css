@@ -13,17 +13,15 @@
   flex-direction: column;
   background: #fff;
   border-radius: 20px;
-  overflow: hidden;   /* ← обрезает фото по скруглению */
-  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  overflow: hidden; /* ← обрезает фото по скруглению */
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
 }
 
 .media {
   width: 100%;
   aspect-ratio: 1 / 1;
-  overflow: hidden;   /* ← на всякий случай */
+  overflow: hidden; /* ← на всякий случай */
 }
-
-
 
 .postImg {
   width: 100%;
@@ -83,7 +81,6 @@
   margin-bottom: 0.8rem;
 }
 
-
 @media (max-width: 600px) {
   .wrapper {
     width: 94vw;
@@ -104,4 +101,9 @@
   overflow: visible !important;
   max-height: none !important;
   padding: 0 !important;
+}
+
+.commentsInModal {
+  padding: 0 !important;
+  margin-top: 8px !important;
 }
