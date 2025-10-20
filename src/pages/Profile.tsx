@@ -84,7 +84,7 @@ const Profile = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('pixter:user')
-    navigate('/auth')
+    navigate('/')
   }
 
   const handleOpenModal = () => {

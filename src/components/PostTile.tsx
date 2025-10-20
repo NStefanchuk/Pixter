@@ -3,12 +3,15 @@ import Styles from '../styles/profile.module.css'
 import Modal from './Modal'
 import postModalStyles from '../styles/postModal.module.css'
 import Comments from './Comments'
+import { type User, type Comment } from '../utils/types'
 
 interface PostProps {
-  id: number | string
+  id: string
   imageUrl: string
   description?: string
   location?: string
+  usersById?: Map<User['id'], User>
+  postComments?: Comment[]
 }
 
 const PostTile = ({
