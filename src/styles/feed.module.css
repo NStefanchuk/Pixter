@@ -58,3 +58,9 @@
   font-size: 0.8rem;
   color: #999;
 }
+
+.commentsSection {
+  border-top: 1px solid var(--border, rgba(0, 0, 0, 0.08));
+  padding-top: 8px;
+  margin-top: 8px;
+}

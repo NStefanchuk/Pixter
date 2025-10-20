@@ -1,0 +1,129 @@
+/* src/styles/comments.module.css */
+:root {
+  --c-text: #111;
+  --c-muted: #6b7280;
+  --c-border: rgba(0, 0, 0, 0.08);
+  --c-hover: rgba(0, 0, 0, 0.03);
+  --gap-sm: 8px;
+  --gap-md: 12px;
+  --radius: 12px;
+  --avatar: 28px;
+  --fs-base: 14px;
+  --fs-meta: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-text: #e5e7eb;
+    --c-muted: #9ca3af;
+    --c-border: rgba(255, 255, 255, 0.12);
+    --c-hover: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.comments {
+  display: grid;
+  gap: var(--gap-sm);
+  font-size: var(--fs-base);
+  color: var(--c-text);
+}
+
+.item {
+  display: grid;
+  grid-template-columns: var(--avatar) 1fr;
+  gap: var(--gap-sm);
+  padding: 6px;
+  border-radius: var(--radius);
+}
+
+.item:hover {
+  background: var(--c-hover);
+}
+
+.avatar {
+  width: var(--avatar);
+  height: var(--avatar);
+  border-radius: 50%;
+  object-fit: cover;
+  background: #e5e7eb;
+}
+
+.body {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+  flex-wrap: wrap;
+}
+
+.username {
+  font-weight: 600;
+  margin-right: 6px;
+  white-space: nowrap;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--c-muted);
+  font-size: var(--fs-meta);
+}
+
+.dot::before {
+  content: '•';
+  margin: 0 4px;
+}
+
+.content {
+  line-height: 1.35;
+  word-wrap: break-word;
+}
+
+.contentClamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.action {
+  color: var(--c-muted);
+  font-size: var(--fs-meta);
+  cursor: pointer;
+  user-select: none;
+}
+
+.action:hover {
+  text-decoration: underline;
+}
+
+.showAll {
+  color: var(--c-muted);
+  font-size: var(--fs-meta);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.showAll:hover {
+  background: var(--c-hover);
+}
+
+.empty {
+  color: var(--c-muted);
+  font-size: var(--fs-meta);
+  padding: 8px 0;
+}

@@ -43,7 +43,7 @@ const Main = () => {
     <div className={styles.feed}>
       {posts.map((post) => {
         const author = usersById.get(String(post.userId))
-        
+
         const postComments =
           (post.id ? commentsByPostId[post.id] : undefined) ?? []
 
@@ -86,7 +86,7 @@ const Main = () => {
               <p className={styles.desc}>{post.description}</p>
             )}
 
-            <div>
+            <div className={styles.commentsSection}>
               <Comments postComments={postComments} usersById={usersById} />
             </div>
           </article>
