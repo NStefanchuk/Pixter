@@ -1,48 +1,27 @@
 /* src/styles/comments.module.css */
-:root {
-  --c-text: #111;
-  --c-muted: #6b7280;
-  --c-border: rgba(0, 0, 0, 0.08);
-  --c-hover: rgba(0, 0, 0, 0.03);
-  --gap-sm: 8px;
-  --gap-md: 12px;
-  --radius: 12px;
-  --avatar: 28px;
-  --fs-base: 14px;
-  --fs-meta: 12px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --c-text: #e5e7eb;
-    --c-muted: #9ca3af;
-    --c-border: rgba(255, 255, 255, 0.12);
-    --c-hover: rgba(255, 255, 255, 0.06);
-  }
-}
 
 .comments {
   display: grid;
-  gap: var(--gap-sm);
-  font-size: var(--fs-base);
-  color: var(--c-text);
+  gap: 8px;
+  font-size: 14px;
+  color: #111;
 }
 
 .item {
   display: grid;
-  grid-template-columns: var(--avatar) 1fr;
-  gap: var(--gap-sm);
+  grid-template-columns: 28px 1fr;
+  gap: 8px;
   padding: 6px;
-  border-radius: var(--radius);
+  border-radius: 12px;
 }
 
 .item:hover {
-  background: var(--c-hover);
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .avatar {
-  width: var(--avatar);
-  height: var(--avatar);
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   object-fit: cover;
   background: #e5e7eb;
@@ -72,12 +51,12 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--c-muted);
-  font-size: var(--fs-meta);
+  color: #6b7280; /* серый текст */
+  font-size: 12px;
 }
 
 .dot::before {
-  content: '•';
+  content: "•";
   margin: 0 4px;
 }
 
@@ -88,7 +67,6 @@
 
 .contentClamp {
   display: -webkit-box;
-  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -100,8 +78,8 @@
 }
 
 .action {
-  color: var(--c-muted);
-  font-size: var(--fs-meta);
+  color: #6b7280;
+  font-size: 12px;
   cursor: pointer;
   user-select: none;
 }
@@ -111,19 +89,22 @@
 }
 
 .showAll {
-  color: var(--c-muted);
-  font-size: var(--fs-meta);
+  color: #6b7280;
+  font-size: 12px;
   cursor: pointer;
   padding: 6px;
   border-radius: 8px;
+  background: transparent;
+  border: 0;
+  text-align: left;
 }
 
 .showAll:hover {
-  background: var(--c-hover);
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .empty {
-  color: var(--c-muted);
-  font-size: var(--fs-meta);
+  color: #6b7280;
+  font-size: 12px;
   padding: 8px 0;
 }
