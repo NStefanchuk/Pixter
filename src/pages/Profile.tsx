@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getComments, getPosts, getUsers } from '../utils/api'
 import Styles from '../styles/profile.module.css'
 import Modal from '../components/Modal'
 import ModalStyles from '../styles/modal.module.css'
 import PostTile from '../components/PostTile'
-import type { Post } from '../utils/types'
+import { type Post, type User, type Comment } from '../utils/types'
 import { getUser, STORED_USER_ID } from '../utils/api'
 
 const Profile = () => {
@@ -15,6 +16,37 @@ const Profile = () => {
   const [posts, setPosts] = useState<Post[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [users, setUsers] = useState<User[]>([])
+  const [comments, setComments] = useState<Comment[]>([])
+  const usersById = useMemo(
+    () => new Map<User['id'], User>(users.map((u) => [u.id, u])),
+    [users]
+  )
+
+  const commentsByPostId = useMemo(() => {
+    const acc: Record<string, Comment[]> = {}
+    for (const c of comments) {
+      const key = c.postId
+      if (!key) continue
+      if (acc[key]) acc[key].push(c)
+      else acc[key] = [c]
+    }
+    return acc
+  }, [comments])
+
+  useEffect(() => {
+    const getMainData = async () => {
+      const [usersData, postsData, commentsData] = await Promise.all([
+        getUsers() as Promise<User[]>,
+        getPosts() as Promise<Post[]>,
+        getComments() as Promise<Comment[]>,
+      ])
+      setUsers(usersData)
+      setPosts(postsData)
+      setComments(commentsData)
+    }
+    getMainData()
+  }, [])
 
   useEffect(() => {
     console.log(STORED_USER_ID)
@@ -168,15 +200,20 @@ const Profile = () => {
             ) : posts.length === 0 ? (
               <p>«No posts yet»</p>
             ) : (
-              posts.map((post) => (
-                <PostTile
-                  key={post.id}
-                  id={post.id}
-                  imageUrl={post.imageUrl}
-                  description={post.description}
-                  location={post.location}
-                />
-              ))
+              posts.map((post) => {
+                const postComments = commentsByPostId[post.id] ?? []
+                return (
+                  <PostTile
+                    key={post.id}
+                    id={post.id}
+                    imageUrl={post.imageUrl}
+                    description={post.description}
+                    location={post.location}
+                    usersById={usersById}
+                    postComments={postComments}
+                  />
+                )
+              })
             )}
           </section>
         </div>

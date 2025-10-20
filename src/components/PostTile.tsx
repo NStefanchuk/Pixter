@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Styles from '../styles/profile.module.css'
 import Modal from './Modal'
 import postModalStyles from '../styles/postModal.module.css'
+import Comments from './Comments'
 
 interface PostProps {
   id: number | string
@@ -10,7 +11,14 @@ interface PostProps {
   location?: string
 }
 
-const PostTile = ({ id, imageUrl, description, location }: PostProps) => {
+const PostTile = ({
+  id,
+  imageUrl,
+  description,
+  location,
+  usersById = new Map<User['id'], User>(),
+  postComments = [],
+}: PostProps) => {
   const comments: Array<{
     id: string | number
     author: string
@@ -70,31 +78,7 @@ const PostTile = ({ id, imageUrl, description, location }: PostProps) => {
                 <p className={postModalStyles.location}>{location}</p>
               )}
 
-              <section
-                className={postModalStyles.comments}
-                aria-label="Comments"
-              >
-                {comments.length > 0 ? (
-                  <ul className={postModalStyles.list}>
-                    {comments.map((c) => (
-                      <li key={c.id} className={postModalStyles.comment}>
-                        <b className={postModalStyles.author}>{c.author}</b>{' '}
-                        <span className={postModalStyles.text}>{c.text}</span>
-                        {c.createdAt && (
-                          <time
-                            className={postModalStyles.time}
-                            dateTime={c.createdAt}
-                          >
-                            {c.createdAt}
-                          </time>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <div className={postModalStyles.empty}>No comments yet</div>
-                )}
-              </section>
+              <Comments postComments={postComments} usersById={usersById} />
             </aside>
           </div>
         </Modal>
