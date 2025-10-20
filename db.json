@@ -227,6 +227,13 @@
       "userId": "u_9f2a",
       "content": "😼",
       "createdAt": "2025-10-15T20:05:00.000Z"
+    },
+    {
+      "id": "74ab",
+      "postId": "ab17",
+      "userId": "b6ad",
+      "content": "привте",
+      "createdAt": "2025-10-20T20:05:52.157Z"
     }
   ],
   "users": [
@@ -251,7 +258,6 @@
       "password": "123123",
       "avatarUrl": "https://i.pinimg.com/736x/0e/8c/b4/0e8cb419ebc5848a3f94141c47738ae8.jpg",
       "createdAt": "2025-10-10T18:47:45.719Z"
-      
     }
   ]
 }

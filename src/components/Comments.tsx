@@ -2,14 +2,14 @@
 import { useState } from 'react'
 import { type Comment, type User } from '../utils/types'
 import c from '../styles/comments.module.css'
+import { createComment, STORED_USER_ID } from '../utils/api'
 
 interface CommentsProps {
   postComments: Comment[]
   usersById: Map<User['id'], User>
-  /** How many comments to show when collapsed */
   visibleCount?: number
-  /** Optional: open post modal (or custom action) */
   onShowAll?: () => void
+  postId: string
 }
 
 const Comments = ({
@@ -17,15 +17,19 @@ const Comments = ({
   usersById,
   visibleCount = 2,
   onShowAll,
+  postId,
 }: CommentsProps) => {
   const [expanded, setExpanded] = useState(false)
+  const [newContent, setNewContent] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [comments, setComments] = useState(postComments)
 
   const handleShowAll = () => {
     if (onShowAll) onShowAll()
     else setExpanded(true)
   }
 
-  const list = expanded ? postComments : postComments.slice(0, visibleCount)
+  const list = expanded ? comments : comments.slice(0, visibleCount)
 
   return (
     <div className={c.comments}>
@@ -48,7 +52,12 @@ const Comments = ({
 
         return (
           <div key={cmt.id} className={c.item}>
-            <img className={c.avatar} src={avatar} alt={username} loading="lazy" />
+            <img
+              className={c.avatar}
+              src={avatar}
+              alt={username}
+              loading="lazy"
+            />
             <div className={c.body}>
               <div className={c.header}>
                 <span className={c.username}>{username}</span>
@@ -67,7 +76,9 @@ const Comments = ({
                 </span>
               </div>
 
-              <div className={`${c.content} ${c.contentClamp}`}>{cmt.content}</div>
+              <div className={`${c.content} ${c.contentClamp}`}>
+                {cmt.content}
+              </div>
 
               <div className={c.actions}>
                 <span className={c.action}>Like</span>
@@ -78,9 +89,46 @@ const Comments = ({
         )
       })}
 
-      {postComments.length === 0 && (
+      {comments.length === 0 && (
         <div className={c.empty}>No comments yet. Be the first!</div>
       )}
+
+      <form
+        className={c.addCommentForm}
+        onSubmit={async (e) => {
+          e.preventDefault()
+          if (!newContent.trim() || !STORED_USER_ID) return
+          setIsSubmitting(true)
+          try {
+            const payload = {
+              postId,
+              userId: String(STORED_USER_ID),
+              content: newContent.trim(),
+              createdAt: new Date().toISOString(),
+            }
+            const saved = await createComment(payload)
+            setComments((xs) => [...xs, saved ?? payload])
+            setNewContent('')
+            if (!expanded) setExpanded(true)
+          } catch (err) {
+            console.error(err)
+          } finally {
+            setIsSubmitting(false)
+          }
+        }}
+      >
+        <input
+          type="text"
+          placeholder="Add a comment..."
+          value={newContent}
+          onChange={(e) => setNewContent(e.target.value)}
+          disabled={isSubmitting}
+          className={c.addCommentInput}
+        />
+        <button type="submit" disabled={isSubmitting || !newContent.trim()}>
+          Send
+        </button>
+      </form>
     </div>
   )
 }
