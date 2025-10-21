@@ -4,7 +4,7 @@ import Registration from '../components/Registration'
 import Styles from '../styles/auth.module.css'
 import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
-import logoUrl from '../assets/logo.png' 
+import logoUrl from '../assets/logo.png'
 
 const Authorization = () => {
   const navigate = useNavigate()
@@ -44,25 +44,11 @@ const Authorization = () => {
         throw new Error('Fill all the fields')
       }
       setIsLoading(true)
-      const email = userData.email.trim().toLowerCase()
 
-      const getData = await fetch(
-        `http://localhost:3000/users?email=${encodeURIComponent(email)}`
-      )
-      const user = await getData.json()
-      if (user.length > 0) {
-        toast.error('Email is already exist')
-        return
-      }
-      const newUser = {
-        ...userData,
-        email,
-        createdAt: new Date().toISOString(),
-      }
-      const submitData = await fetch('http://localhost:3000/users', {
+      const submitData = await fetch('http://localhost:4000/users/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newUser),
+        body: JSON.stringify(userData),
       })
       const res = await submitData.json()
       console.log(res)
@@ -97,7 +83,7 @@ const Authorization = () => {
       } else {
         throw new Error('Wrong password')
       }
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.message)
     } finally {
       setIsLoading(false)
