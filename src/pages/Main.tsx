@@ -87,7 +87,7 @@ const Main = () => {
             )}
 
             <div className={styles.commentsSection}>
-              <Comments postComments={postComments} usersById={usersById} />
+              <Comments postComments={postComments} usersById={usersById} postId={String(post.id)} className={styles.commentsInFeed}/>
             </div>
           </article>
         )

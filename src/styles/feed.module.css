@@ -64,3 +64,9 @@
   padding-top: 8px;
   margin-top: 8px;
 }
+
+.commentsInFeed {
+  padding: 0;         
+  margin-top: 8px;     
+  gap: 6px;           
+}
