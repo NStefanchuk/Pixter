@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  username     String   @unique
+  passwordHash String
+  avatarUrl    String?
+  bio          String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  posts    Post[]
+  comments Comment[]
+  likes    PostLike[]
+  sentDMs  DirectMessage[] @relation("DM_Sent")
+  recvDMs  DirectMessage[] @relation("DM_Recv")
+  stories  Story[]
+  views    StoryView[]
+
+  // m2m follow
+  following Follow[] @relation("Following")
+  followers Follow[] @relation("Followers")
+}
+
+model Follow {
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+model Post {
+  id           String   @id @default(cuid())
+  authorId     String
+  imageUrl     String
+  description  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  likeCount    Int      @default(0)
+  commentCount Int      @default(0)
+
+  author   User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments Comment[]
+  likes    PostLike[]
+
+  @@index([authorId, createdAt])
+  @@index([createdAt])
+}
+
+model PostLike {
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId])
+  @@index([postId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  authorId  String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([postId, createdAt])
+  @@index([authorId])
+}
+
+model DirectMessage {
+  id         String   @id @default(cuid())
+  senderId   String
+  receiverId String
+  body       String?
+  imageUrl   String?
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  sender   User @relation("DM_Sent", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("DM_Recv", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([senderId, createdAt])
+  @@index([receiverId, isRead, createdAt])
+}
+
+model Story {
+  id        String   @id @default(cuid())
+  authorId  String
+  imageUrl  String
+  caption   String?
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  author User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  views  StoryView[]
+
+  @@index([authorId, createdAt])
+  @@index([expiresAt])
+}
+
+model StoryView {
+  storyId  String
+  viewerId String
+  viewedAt DateTime @default(now())
+
+  story  Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  viewer User  @relation(fields: [viewerId], references: [id], onDelete: Cascade)
+
+  @@id([storyId, viewerId])
+  @@index([viewerId])
+}
