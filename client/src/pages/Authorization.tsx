@@ -64,25 +64,22 @@ const Authorization = () => {
       e.preventDefault()
       const email = userLogin.email.trim().toLowerCase()
       setIsLoading(true)
-      const getUser = await fetch(
-        `http://localhost:3000/users?email=${encodeURIComponent(email)}`
-      )
-      const user = await getUser.json()
-      if (user.length === 0) {
-        throw new Error('User doesn’t exist')
+      const resp = await fetch('http://localhost:4000/users/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          email: userLogin.email.trim().toLowerCase(),
+          password: userLogin.password,
+        }),
+      })
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}))
+        throw new Error(err?.error || 'Login failed')
       }
-      const password = userLogin.password
-      if (password === user[0].password) {
-        const { id, username, email, createdAt } = user[0]
-        localStorage.setItem(
-          'pixter:user',
-          JSON.stringify({ id, username, email, createdAt })
-        )
-        toast.success('You are logged in successfully')
-        navigate('/profile')
-      } else {
-        throw new Error('Wrong password')
-      }
+      const { user, token } = await resp.json()
+      localStorage.setItem('pixter:auth', JSON.stringify({ user, token }))
+      toast.success('You are logged in successfully')
+      navigate('/profile')
     } catch (error: any) {
       toast.error(error.message)
     } finally {
