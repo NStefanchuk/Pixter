@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 
 import cors from 'cors'
 import { users } from './modules/users/users.routes'
+import { postsRouter } from './modules/posts/posts.routes'
 
 dotenv.config()
 
@@ -16,3 +17,5 @@ app.use(
 )
 
 app.use('/users', users)
+app.use('/posts', postsRouter)
+
