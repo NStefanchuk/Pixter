@@ -21,3 +21,14 @@ export const loginUser = async (req: any, res: any) => {
       .json({ error: err.message, details: err.details })
   }
 }
+
+export const getMe = async (req: any, res: any) => {
+  try {
+    const me = await usersService.getMe(req.userId)
+    res.status(200).json(me)
+  } catch (err: any) {
+    res
+      .status(err.status || 500)
+      .json({ error: err.message, details: err.details })
+  }
+}
