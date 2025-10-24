@@ -1,7 +1,8 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import { users } from './modules/users'
+
 import cors from 'cors'
+import { users } from './modules/users/users.routes'
 
 dotenv.config()
 
@@ -10,7 +11,7 @@ app.use(express.json())
 
 app.use(
   cors({
-    origin: 'http://localhost:5173'
+    origin: 'http://localhost:5173',
   })
 )
 
