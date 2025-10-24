@@ -2,8 +2,8 @@ import { Router } from 'express'
 import { getMe, loginUser, registerUser } from './users.controller'
 import { requireAuth } from '../../lib/requireAuth'
 
-export const users = Router()
+export const usersRouter = Router()
 
-users.post('/register', registerUser)
-users.post('/login', loginUser)
-users.get('/me', requireAuth, getMe)
+usersRouter.post('/register', registerUser)
+usersRouter.post('/login', loginUser)
+usersRouter.get('/me', requireAuth, getMe)
