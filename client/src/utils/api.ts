@@ -3,6 +3,21 @@ import type { NewComment } from './types'
 export const STORED_USER_ID =
   JSON.parse(localStorage.getItem('pixter:user') || 'null')?.id ?? null
 
+export function getAuthHeaders() {
+  const authData = localStorage.getItem('pixter:auth')
+  if (!authData) return {}
+
+  try {
+    const { token } = JSON.parse(authData)
+    return {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    }
+  } catch {
+    return {}
+  }
+}
+
 export const getUsers = async () => {
   try {
     const res = await fetch(`http://localhost:3000/users`)

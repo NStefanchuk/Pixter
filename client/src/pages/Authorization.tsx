@@ -60,28 +60,32 @@ const Authorization = () => {
   }
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
     try {
-      e.preventDefault()
-      const email = userLogin.email.trim().toLowerCase()
       setIsLoading(true)
+
+      const email = userLogin.email.trim().toLowerCase()
+      const password = userLogin.password
+
       const resp = await fetch('http://localhost:4000/users/login', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          email: userLogin.email.trim().toLowerCase(),
-          password: userLogin.password,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       })
+
       if (!resp.ok) {
         const err = await resp.json().catch(() => ({}))
-        throw new Error(err?.error || 'Login failed')
+        throw new Error(err?.error || 'Invalid email or password')
       }
+
       const { user, token } = await resp.json()
+
       localStorage.setItem('pixter:auth', JSON.stringify({ user, token }))
       toast.success('You are logged in successfully')
       navigate('/profile')
     } catch (error: any) {
-      toast.error(error.message)
+      toast.error(error.message || 'Login failed')
     } finally {
       setIsLoading(false)
     }
