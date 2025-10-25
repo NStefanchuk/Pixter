@@ -18,15 +18,15 @@ export function getAuthHeaders() {
   }
 }
 
-export const getUsers = async () => {
-  try {
-    const res = await fetch(`http://localhost:3000/users`)
-    const data = await res.json()
-    return data
-  } catch (e) {
-    console.error(e)
-  }
-}
+// export const getUsers = async () => {
+//   try {
+//     const res = await fetch(`http://localhost:3000/users`)
+//     const data = await res.json()
+//     return data
+//   } catch (e) {
+//     console.error(e)
+//   }
+// }
 
 export const getUser = async () => {
   try {
