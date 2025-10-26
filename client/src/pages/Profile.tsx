@@ -1,89 +1,66 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getComments, getPosts, getUsers } from '../utils/api'
+import { getPosts, getUser, getAuthHeaders } from '../utils/api'
 import Styles from '../styles/profile.module.css'
 import Modal from '../components/Modal'
 import ModalStyles from '../styles/modal.module.css'
 import PostTile from '../components/PostTile'
-import { type Post, type User, type Comment } from '../utils/types'
-import { getUser, STORED_USER_ID } from '../utils/api'
+import { type Post } from '../utils/types'
 
 const Profile = () => {
   const navigate = useNavigate()
+
   const [user, setUser] = useState<any>(null)
   const [isOpen, setIsOpen] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
   const [posts, setPosts] = useState<Post[]>([])
+
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [users, setUsers] = useState<User[]>([])
-  const [comments, setComments] = useState<Comment[]>([])
-  const usersById = useMemo(
-    () => new Map<User['id'], User>(users.map((u) => [u.id, u])),
-    [users]
-  )
-
-  const commentsByPostId = useMemo(() => {
-    const acc: Record<string, Comment[]> = {}
-    for (const c of comments) {
-      const key = c.postId
-      if (!key) continue
-      if (acc[key]) acc[key].push(c)
-      else acc[key] = [c]
-    }
-    return acc
-  }, [comments])
 
   useEffect(() => {
-    const getMainData = async () => {
-      const [usersData, postsData, commentsData] = await Promise.all([
-        getUsers() as Promise<User[]>,
-        getPosts() as Promise<Post[]>,
-        getComments() as Promise<Comment[]>,
-      ])
-      setUsers(usersData)
-      setPosts(postsData)
-      setComments(commentsData)
-    }
-    getMainData()
-  }, [])
-
-  useEffect(() => {
-    console.log(STORED_USER_ID)
-    if (!STORED_USER_ID) {
+    const authRaw = localStorage.getItem('pixter:auth')
+    if (!authRaw) {
       navigate('/auth')
       return
     }
-    const getUserData = async () => {
-      const userData = await getUser()
-      setUser(userData)
+
+    const fetchUser = async () => {
+      try {
+        const me = await getUser()
+        setUser(me)
+      } catch (err) {
+        console.error(err)
+        navigate('/auth')
+      }
     }
-    getUserData()
-  }, [STORED_USER_ID, navigate])
+
+    fetchUser()
+  }, [navigate])
 
   useEffect(() => {
-    setIsLoading(true)
-    let ignore = false
-    ;(async () => {
+    const fetchMyPosts = async () => {
+      if (!user) return
+
+      setIsLoading(true)
       try {
-        const res = await fetch(
-          `http://localhost:3000/posts?userId=${STORED_USER_ID}`
-        )
-        const data = await res.json()
-        if (!ignore) setPosts(data)
-      } catch (e) {
-        console.error(e)
+        const allPosts = await getPosts()
+        const mine = Array.isArray(allPosts)
+          ? allPosts.filter((p: any) => p.author?.id === user.id)
+          : []
+        setPosts(mine)
+      } catch (err) {
+        console.error(err)
       } finally {
         setIsLoading(false)
       }
-    })()
-    return () => {
-      ignore = true
     }
-  }, [STORED_USER_ID])
+
+    fetchMyPosts()
+  }, [user])
 
   const handleLogout = () => {
-    localStorage.removeItem('pixter:user')
+    localStorage.removeItem('pixter:auth')
     navigate('/')
   }
 
@@ -100,36 +77,45 @@ const Profile = () => {
   }
 
   const handlePostImage = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    const formData = new FormData(e.currentTarget)
+    const formImageUrl = (formData.get('imageUrl') ?? '').toString().trim()
+    const formDescription = (formData.get('description') ?? '')
+      .toString()
+      .trim()
+
+    if (!formImageUrl) return
+
+    const newPostBody = {
+      imageUrl: formImageUrl,
+      description: formDescription || undefined,
+    }
+
+    setIsSubmitting(true)
+
     try {
-      e.preventDefault()
-
-      const formData = new FormData(e.currentTarget)
-      const formImageUrl = (formData.get('imageUrl') ?? '').toString().trim()
-      const formDescription = (formData.get('description') ?? '')
-        .toString()
-        .trim()
-      const formLocation = (formData.get('location') ?? '').toString().trim()
-
-      const newPost = {
-        userId: STORED_USER_ID,
-        imageUrl: formImageUrl,
-        description: formDescription,
-        location: formLocation,
-        createdAt: new Date().toISOString(),
+      const headers = getAuthHeaders()
+      const response = await fetch('http://localhost:4000/posts', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(newPostBody),
+      })
+      const createdPost = await response.json()
+      if (createdPost?.author?.id === user?.id) {
+        setPosts((prev) => [createdPost, ...prev])
+      } else {
+        try {
+          const allPosts = await getPosts()
+          const mine = Array.isArray(allPosts)
+            ? allPosts.filter((p: any) => p.author?.id === user.id)
+            : []
+          setPosts(mine)
+        } catch (reloadErr) {
+          console.error(reloadErr)
+        }
       }
 
-      setIsSubmitting(true)
-      const submitData = await fetch('http://localhost:3000/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newPost),
-      })
-      const res = await submitData.json()
-      const req = await fetch(
-        `http://localhost:3000/posts?userId=${STORED_USER_ID}`
-      )
-      const data = await req.json()
-      setPosts(data)
       handleCloseModal()
       e.currentTarget.reset()
       setImageUrl('')
@@ -158,6 +144,7 @@ const Profile = () => {
                 </div>
               )}
             </div>
+
             <div className={Styles.profileInfo}>
               <div className={Styles.profileTopRow}>
                 <h1 className={Styles.username}>{user?.username}</h1>
@@ -181,7 +168,9 @@ const Profile = () => {
               <p className={Styles.bio}>{user?.bio ?? ''}</p>
               <p className={Styles.email}>{user?.email}</p>
               <p className={Styles.meta}>
-                Joined: {new Date(user?.createdAt).toLocaleDateString()}
+                {user?.createdAt
+                  ? `Joined: ${new Date(user.createdAt).toLocaleDateString()}`
+                  : null}
               </p>
 
               <div className={Styles.profileActions}>
@@ -194,26 +183,22 @@ const Profile = () => {
               </div>
             </div>
           </div>
+
           <section className={Styles.profilePosts}>
             {isLoading ? (
               <p>«Loading…»</p>
             ) : posts.length === 0 ? (
               <p>«No posts yet»</p>
             ) : (
-              posts.map((post) => {
-                const postComments = commentsByPostId[post.id] ?? []
-                return (
-                  <PostTile
-                    key={post.id}
-                    id={post.id}
-                    imageUrl={post.imageUrl}
-                    description={post.description}
-                    location={post.location}
-                    usersById={usersById}
-                    postComments={postComments}
-                  />
-                )
-              })
+              posts.map((post) => (
+                <PostTile
+                  key={post.id}
+                  id={post.id}
+                  imageUrl={post.imageUrl}
+                  description={post.description}
+                  location={post.location}
+                />
+              ))
             )}
           </section>
         </div>
@@ -248,20 +233,6 @@ const Profile = () => {
                 className={ModalStyles.textarea}
               />
             </div>
-
-            <div className={ModalStyles.formRow}>
-              <label className={ModalStyles.label} htmlFor="location">
-                Location (optional)
-              </label>
-              <input
-                id="location"
-                name="location"
-                type="text"
-                placeholder="City, place…"
-                className={ModalStyles.input}
-              />
-            </div>
-
             <div className={ModalStyles.actions}>
               <button
                 className={ModalStyles.secondaryBtn}
