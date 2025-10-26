@@ -18,19 +18,10 @@ export function getAuthHeaders() {
   }
 }
 
-// export const getUsers = async () => {
-//   try {
-//     const res = await fetch(`http://localhost:3000/users`)
-//     const data = await res.json()
-//     return data
-//   } catch (e) {
-//     console.error(e)
-//   }
-// }
-
 export const getUser = async () => {
   try {
-    const res = await fetch(`http://localhost:3000/users/${STORED_USER_ID}`)
+    const headers = getAuthHeaders()
+    const res = await fetch(`http://localhost:4000/users/me`, { headers })
     const data = await res.json()
     return data
   } catch (e) {
@@ -40,7 +31,7 @@ export const getUser = async () => {
 
 export const getPosts = async () => {
   try {
-    const res = await fetch(`http://localhost:3000/posts`)
+    const res = await fetch(`http://localhost:4000/posts`)
     const data = await res.json()
     return data
   } catch (e) {
@@ -50,7 +41,7 @@ export const getPosts = async () => {
 
 export const getComments = async () => {
   try {
-    const res = await fetch(`http://localhost:3000/comments`)
+    const res = await fetch(`http://localhost:4000/comments`)
     const data = await res.json()
     return data
   } catch (e) {
@@ -60,9 +51,10 @@ export const getComments = async () => {
 
 export const createComment = async (newComment: NewComment) => {
   try {
-    const response = await fetch('http://localhost:3000/comments', {
+    const headers = getAuthHeaders()
+    const response = await fetch('http://localhost:4000/comments', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify(newComment),
     })
     const data = await response.json()

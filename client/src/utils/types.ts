@@ -29,7 +29,5 @@ export type Comment = {
 
 export interface NewComment {
   postId: string
-  userId: string
   content: string
-  createdAt: string
 }
