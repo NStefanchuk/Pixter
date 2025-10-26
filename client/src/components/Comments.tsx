@@ -1,12 +1,10 @@
-// src/components/Comments.tsx
 import { useEffect, useState } from 'react'
-import { type Comment, type User } from '../utils/types'
+import { type Comment } from '../utils/types'
 import c from '../styles/comments.module.css'
-import { createComment, STORED_USER_ID } from '../utils/api'
+import { createComment } from '../utils/api'
 
 interface CommentsProps {
   postComments: Comment[]
-  usersById: Map<User['id'], User>
   visibleCount?: number
   onShowAll?: () => void
   className?: string
@@ -15,7 +13,6 @@ interface CommentsProps {
 
 const Comments = ({
   postComments,
-  usersById,
   visibleCount = 2,
   onShowAll,
   className = '',
@@ -24,7 +21,7 @@ const Comments = ({
   const [expanded, setExpanded] = useState(false)
   const [newContent, setNewContent] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [comments, setComments] = useState(postComments)
+  const [comments, setComments] = useState<Comment[]>(postComments)
 
   useEffect(() => {
     setComments(postComments)
@@ -45,16 +42,16 @@ const Comments = ({
           type="button"
           className={c.showAll}
           onClick={handleShowAll}
-          aria-label={`Show all ${postComments.length} comments`}
+          aria-label={`Show all ${comments.length} comments`}
         >
           Show all {comments.length} comments
         </button>
       )}
 
       {list.map((cmt) => {
-        const user = usersById.get(cmt.userId)
-        const username = user?.username || 'User'
-        const avatar = user?.avatarUrl
+        const author = (cmt as any).author
+        const username = author?.username || 'User'
+        const avatar = author?.avatarUrl || ''
         const createdAt = cmt.createdAt ? new Date(String(cmt.createdAt)) : null
 
         return (
@@ -68,6 +65,7 @@ const Comments = ({
             <div className={c.body}>
               <div className={c.header}>
                 <span className={c.username}>{username}</span>
+
                 <span className={c.meta}>
                   {createdAt && (
                     <time dateTime={createdAt.toISOString()}>
@@ -104,17 +102,23 @@ const Comments = ({
         className={c.addCommentForm}
         onSubmit={async (e) => {
           e.preventDefault()
-          if (!newContent.trim() || !STORED_USER_ID) return
+          if (!newContent.trim()) return
+
           setIsSubmitting(true)
           try {
             const payload = {
               postId,
-              userId: String(STORED_USER_ID),
               content: newContent.trim(),
-              createdAt: new Date().toISOString(),
             }
+
             const saved = await createComment(payload)
-            setComments((xs) => [...xs, saved ?? payload])
+
+            if (saved) {
+              setComments((xs) => [...xs, saved])
+            } else {
+              console.warn('createComment returned empty response')
+            }
+
             setNewContent('')
             if (!expanded) setExpanded(true)
           } catch (err) {
