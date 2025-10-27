@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getPosts, getUser, getAuthHeaders } from '../utils/api'
+import { getPosts, getUser, createPost } from '../utils/api'
 import Styles from '../styles/profile.module.css'
 import Modal from '../components/Modal'
 import ModalStyles from '../styles/modal.module.css'
@@ -87,7 +87,7 @@ const Profile = () => {
 
     if (!formImageUrl) return
 
-    const newPostBody = {
+    const payload = {
       imageUrl: formImageUrl,
       description: formDescription || undefined,
     }
@@ -95,25 +95,15 @@ const Profile = () => {
     setIsSubmitting(true)
 
     try {
-      const headers = getAuthHeaders()
-      const response = await fetch('http://localhost:4000/posts', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(newPostBody),
-      })
-      const createdPost = await response.json()
+      const createdPost = await createPost(payload)
       if (createdPost?.author?.id === user?.id) {
         setPosts((prev) => [createdPost, ...prev])
       } else {
-        try {
-          const allPosts = await getPosts()
-          const mine = Array.isArray(allPosts)
-            ? allPosts.filter((p: any) => p.author?.id === user.id)
-            : []
-          setPosts(mine)
-        } catch (reloadErr) {
-          console.error(reloadErr)
-        }
+        const allPosts = await getPosts()
+        const mine = Array.isArray(allPosts)
+          ? allPosts.filter((p: any) => p.author?.id === user.id)
+          : []
+        setPosts(mine)
       }
 
       handleCloseModal()
@@ -152,15 +142,21 @@ const Profile = () => {
 
               <div className={Styles.stats}>
                 <div className={Styles.stat}>
-                  <span className={Styles.statValue}>{user?.posts ?? 0}</span>
+                  <span className={Styles.statValue}>
+                    {user?.postsCount ?? 0}
+                  </span>
                   <span className={Styles.statLabel}>Posts</span>
                 </div>
                 <div className={Styles.stat}>
-                  <span className={Styles.statValue}>{user?.followers}</span>
+                  <span className={Styles.statValue}>
+                    {user?.followersCount}
+                  </span>
                   <span className={Styles.statLabel}>Followers</span>
                 </div>
                 <div className={Styles.stat}>
-                  <span className={Styles.statValue}>{user?.following}</span>
+                  <span className={Styles.statValue}>
+                    {user?.followingCount}
+                  </span>
                   <span className={Styles.statLabel}>Following</span>
                 </div>
               </div>
