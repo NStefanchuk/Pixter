@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { getComments, getPosts } from '../utils/api'
 import { type Post, type Comment } from '../utils/types'
 import styles from '../styles/feed.module.css'
-import Comments from '../components/Comments'
+import Comments from '../components/Comments.mui'
 
 const Main = () => {
   const [posts, setPosts] = useState<Post[]>([])

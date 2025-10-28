@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
-import Comments from './Comments'
+import Comments from './Comments.mui'
 import { type User, type Comment } from '../utils/types'
 
 interface PostProps {
