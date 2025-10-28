@@ -6,9 +6,8 @@ import {
   Avatar,
   Button,
   TextField,
-  Divider,
   IconButton,
-  Paper,
+  Divider,
 } from '@mui/material'
 import { createComment } from '../utils/api'
 import { type Comment } from '../utils/types'
@@ -53,212 +52,230 @@ const Comments = ({
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 2,
+        height: '100%',
+        minHeight: 0,
         fontSize: '0.9rem',
+        bgcolor: 'background.paper',
+        borderRadius: 1,
+        border: '1px solid',
+        borderColor: 'divider',
       }}
     >
-      {/* Show all button */}
-      {!expanded && comments.length > visibleCount && (
-        <Button
-          onClick={handleShowAll}
-          variant="text"
-          size="small"
-          sx={{
-            alignSelf: 'flex-start',
-            p: 0,
-            minWidth: 'auto',
-            textTransform: 'none',
-            fontSize: '0.8rem',
-            color: 'text.secondary',
-            '&:hover': { color: 'text.primary' },
-          }}
-        >
-          Show all {comments.length} comments
-        </Button>
-      )}
+      <Box
+        sx={{
+          flex: 1,
+          minHeight: 0,
+          overflowY: 'auto',
+          p: 2,
+          pt: 1.5,
+        }}
+      >
+        {/* Show all button */}
+        {!expanded && comments.length > visibleCount && (
+          <Button
+            onClick={handleShowAll}
+            variant="text"
+            size="small"
+            sx={{
+              alignSelf: 'flex-start',
+              p: 0,
+              minWidth: 'auto',
+              textTransform: 'none',
+              fontSize: '0.8rem',
+              color: 'text.secondary',
+              '&:hover': { color: 'text.primary' },
+              mb: 1,
+            }}
+          >
+            Show all {comments.length} comments
+          </Button>
+        )}
 
-      {/* comments list */}
-      <Stack spacing={2} sx={{ maxHeight: 240, overflowY: 'auto', pr: 1 }}>
-        {list.map((cmt) => {
-          const author = (cmt as any).author
-          const username = author?.username || 'User'
-          const avatar = author?.avatarUrl || ''
-          const createdAt = cmt.createdAt
-            ? new Date(String(cmt.createdAt))
-            : null
+        {/* comments list */}
+        <Stack spacing={2} sx={{ pr: 1 }}>
+          {list.map((cmt) => {
+            const author = (cmt as any).author
+            const username = author?.username || 'User'
+            const avatar = author?.avatarUrl || ''
+            const createdAt = cmt.createdAt
+              ? new Date(String(cmt.createdAt))
+              : null
 
-          return (
-            <Stack
-              key={cmt.id}
-              direction="row"
-              spacing={1.5}
-              alignItems="flex-start"
-            >
-              {/* avatar */}
-              <Avatar
-                src={avatar}
-                alt={username}
-                sx={{
-                  width: 32,
-                  height: 32,
-                  fontSize: 14,
-                  fontWeight: 600,
-                  bgcolor: avatar ? undefined : 'primary.main',
-                }}
+            return (
+              <Stack
+                key={cmt.id}
+                direction="row"
+                spacing={1.5}
+                alignItems="flex-start"
               >
-                {!avatar ? username?.[0]?.toUpperCase() ?? 'U' : undefined}
-              </Avatar>
-
-              {/* comment body */}
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                {/* header row */}
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  alignItems="baseline"
-                  sx={{ flexWrap: 'wrap' }}
-                >
-                  <Typography
-                    variant="subtitle2"
-                    fontWeight={600}
-                    sx={{ lineHeight: 1.2 }}
-                  >
-                    {username}
-                  </Typography>
-
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      color: 'text.secondary',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1,
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {createdAt && (
-                      <time dateTime={createdAt.toISOString()}>
-                        {createdAt.toLocaleDateString('en-GB', {
-                          day: '2-digit',
-                          month: 'short',
-                          year: 'numeric',
-                        })}
-                      </time>
-                    )}
-
-                    {/* dot separator */}
-                    <Box
-                      component="span"
-                      sx={{
-                        width: 4,
-                        height: 4,
-                        borderRadius: '50%',
-                        bgcolor: 'text.disabled',
-                        display: 'inline-block',
-                      }}
-                    />
-
-                    <Stack
-                      direction="row"
-                      spacing={1}
-                      sx={{ color: 'text.secondary' }}
-                    >
-                      <Stack
-                        direction="row"
-                        spacing={0.5}
-                        alignItems="center"
-                        sx={{
-                          cursor: 'pointer',
-                          '&:hover': { color: 'text.primary' },
-                          fontSize: '0.7rem',
-                          lineHeight: 1,
-                        }}
-                      >
-                        <ReplyIcon sx={{ fontSize: 14 }} />
-                        <Typography variant="caption" sx={{ lineHeight: 1 }}>
-                          Reply
-                        </Typography>
-                      </Stack>
-                    </Stack>
-                  </Typography>
-                </Stack>
-
-                {/* content */}
-                <Typography
-                  variant="body2"
+                {/* avatar */}
+                <Avatar
+                  src={avatar}
+                  alt={username}
                   sx={{
-                    color: 'text.primary',
-                    whiteSpace: 'pre-wrap',
-                    wordBreak: 'break-word',
-                    mt: 0.5,
-                    maxHeight: 80,
-                    overflow: 'hidden',
+                    width: 32,
+                    height: 32,
+                    fontSize: 14,
+                    fontWeight: 600,
+                    bgcolor: avatar ? undefined : 'primary.main',
                   }}
                 >
-                  {cmt.content}
-                </Typography>
+                  {!avatar ? username?.[0]?.toUpperCase() ?? 'U' : undefined}
+                </Avatar>
 
-                {/* actions row */}
-                <Stack
-                  direction="row"
-                  spacing={1.5}
-                  alignItems="center"
-                  sx={{
-                    mt: 0.5,
-                    color: 'text.secondary',
-                    fontSize: '0.8rem',
-                  }}
-                >
+                {/* comment body */}
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  {/* header row */}
                   <Stack
                     direction="row"
-                    alignItems="center"
-                    spacing={0.5}
-                    sx={{
-                      cursor: 'pointer',
-                      '&:hover': { color: 'text.primary' },
-                    }}
+                    spacing={1}
+                    alignItems="baseline"
+                    sx={{ flexWrap: 'wrap' }}
                   >
-                    <IconButton
-                      size="small"
+                    <Typography
+                      variant="subtitle2"
+                      fontWeight={600}
+                      sx={{ lineHeight: 1.2 }}
+                    >
+                      {username}
+                    </Typography>
+
+                    <Typography
+                      variant="caption"
                       sx={{
-                        p: 0,
                         color: 'text.secondary',
-                        '&:hover': { color: 'primary.main' },
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        lineHeight: 1.2,
                       }}
                     >
-                      <FavoriteBorderIcon sx={{ fontSize: 16 }} />
-                    </IconButton>
-                    <Typography variant="caption">Like</Typography>
+                      {createdAt && (
+                        <time dateTime={createdAt.toISOString()}>
+                          {createdAt.toLocaleDateString('en-GB', {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric',
+                          })}
+                        </time>
+                      )}
+
+                      {/* dot separator */}
+                      <Box
+                        component="span"
+                        sx={{
+                          width: 4,
+                          height: 4,
+                          borderRadius: '50%',
+                          bgcolor: 'text.disabled',
+                          display: 'inline-block',
+                        }}
+                      />
+
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        sx={{ color: 'text.secondary' }}
+                      >
+                        <Stack
+                          direction="row"
+                          spacing={0.5}
+                          alignItems="center"
+                          sx={{
+                            cursor: 'pointer',
+                            '&:hover': { color: 'text.primary' },
+                            fontSize: '0.7rem',
+                            lineHeight: 1,
+                          }}
+                        >
+                          <ReplyIcon sx={{ fontSize: 14 }} />
+                          <Typography variant="caption" sx={{ lineHeight: 1 }}>
+                            Reply
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                    </Typography>
                   </Stack>
 
+                  {/* content */}
                   <Typography
-                    variant="caption"
+                    variant="body2"
                     sx={{
-                      cursor: 'pointer',
-                      '&:hover': { color: 'text.primary' },
+                      color: 'text.primary',
+                      whiteSpace: 'pre-wrap',
+                      wordBreak: 'break-word',
+                      mt: 0.5,
+                      maxHeight: 80,
+                      overflow: 'hidden',
                     }}
                   >
-                    Reply
+                    {cmt.content}
                   </Typography>
-                </Stack>
-              </Box>
-            </Stack>
-          )
-        })}
 
-        {comments.length === 0 && (
-          <Typography
-            variant="body2"
-            sx={{ color: 'text.secondary', textAlign: 'center', py: 4 }}
-          >
-            No comments yet. Be the first!
-          </Typography>
-        )}
-      </Stack>
+                  {/* actions row */}
+                  <Stack
+                    direction="row"
+                    spacing={1.5}
+                    alignItems="center"
+                    sx={{
+                      mt: 0.5,
+                      color: 'text.secondary',
+                      fontSize: '0.8rem',
+                    }}
+                  >
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={0.5}
+                      sx={{
+                        cursor: 'pointer',
+                        '&:hover': { color: 'text.primary' },
+                      }}
+                    >
+                      <IconButton
+                        size="small"
+                        sx={{
+                          p: 0,
+                          color: 'text.secondary',
+                          '&:hover': { color: 'primary.main' },
+                        }}
+                      >
+                        <FavoriteBorderIcon sx={{ fontSize: 16 }} />
+                      </IconButton>
+                      <Typography variant="caption">Like</Typography>
+                    </Stack>
+
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        cursor: 'pointer',
+                        '&:hover': { color: 'text.primary' },
+                      }}
+                    >
+                      Reply
+                    </Typography>
+                  </Stack>
+                </Box>
+              </Stack>
+            )
+          })}
+
+          {comments.length === 0 && (
+            <Typography
+              variant="body2"
+              sx={{
+                color: 'text.secondary',
+                textAlign: 'center',
+                py: 4,
+              }}
+            >
+              No comments yet. Be the first!
+            </Typography>
+          )}
+        </Stack>
+      </Box>
 
       <Divider sx={{ opacity: 0.15 }} />
-
-      {/* add comment form */}
       <Box
         component="form"
         onSubmit={async (e) => {
@@ -289,15 +306,12 @@ const Comments = ({
           }
         }}
         sx={{
+          flexShrink: 0,
           display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'flex-start',
+          alignItems: 'center',
           gap: 1,
-          bgcolor: 'background.paper',
-          borderRadius: 1,
-          border: '1px solid',
-          borderColor: 'divider',
-          p: 1,
+          px: 2,
+          py: 1.5,
         }}
       >
         <TextField
@@ -306,15 +320,12 @@ const Comments = ({
           value={newContent}
           onChange={(e) => setNewContent(e.target.value)}
           disabled={isSubmitting}
-          variant="standard"
+          variant="outlined"
+          size="small"
           fullWidth
           InputProps={{
-            disableUnderline: true,
-          }}
-          sx={{
-            fontSize: '0.9rem',
-            '& .MuiInputBase-input.Mui-disabled': {
-              WebkitTextFillColor: (theme) => theme.palette.text.disabled,
+            sx: {
+              fontSize: '0.9rem',
             },
           }}
         />
