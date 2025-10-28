@@ -82,19 +82,18 @@ const Welcome = () => {
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: '50%',
-            filter: 'drop-shadow(0 8px 20px rgba(156,39,176,0.5))',
             color: 'primary.main',
           }}
           aria-label="Pixter logo"
         >
-          <RiCameraLensFill size={64} />
+          <RiCameraLensFill size={94} />
         </Box>
 
         {/* Title */}
         <Typography
           variant="h5"
           fontWeight={600}
-          sx={{ mb: 1, color: 'text.primary' }}
+          sx={{ mb: 1, color: 'var(--text-primary, rgba(0,0,0,0.87))' }}
         >
           Create. Capture. Connect.
         </Typography>
@@ -104,7 +103,8 @@ const Welcome = () => {
           variant="body2"
           sx={{
             mb: 3,
-            color: 'var(--text-secondary, rgba(0,0,0,0.6))',
+            color: 'var(--text-primary, rgba(0,0,0,0.87))',
+            opacity: 0.85,
             lineHeight: 1.5,
           }}
         >
@@ -134,7 +134,8 @@ const Welcome = () => {
           sx={{
             display: 'block',
             mt: 2.5,
-            color: 'var(--text-secondary, rgba(0,0,0,0.6))',
+            color: 'var(--text-primary, rgba(0,0,0,0.87))',
+            opacity: 0.75,
           }}
         >
           Join now and be part of a creative community.
