@@ -34,8 +34,6 @@ const PostTile = ({
   usersById = new Map<User['id'], User>(),
   postComments = [],
 }: PostProps) => {
-  // NOTE: comments array from old code не использовался по факту, так что мы его не трогаем логически
-
   const [isOpen, setIsOpen] = useState(false)
   const handleOpenPostModal = () => {
     setIsOpen(true)
@@ -49,7 +47,6 @@ const PostTile = ({
 
   return (
     <>
-      {/* превью-карточка поста в сетке профайла */}
       <Card
         variant="outlined"
         sx={{
@@ -74,18 +71,21 @@ const PostTile = ({
         </CardActionArea>
       </Card>
 
-      {/* полноэкранный просмотр поста */}
       <Dialog
         open={isOpen}
         onClose={handleClosePostModal}
         fullWidth
-        maxWidth="md"
+        maxWidth="sm"
         fullScreen={fullScreen}
         PaperProps={{
           sx: {
             borderRadius: fullScreen ? 0 : 2,
             overflow: 'hidden',
-            bgcolor: 'background.default',
+            bgcolor: 'background.paper',
+            height: fullScreen ? '100vh' : 600,
+            maxHeight: fullScreen ? '100vh' : 600,
+            display: 'flex',
+            flexDirection: 'column',
           },
         }}
       >
@@ -93,19 +93,19 @@ const PostTile = ({
           sx={{
             p: 0,
             display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
-            bgcolor: 'background.default',
+            flexDirection: 'column',
+            flex: 1,
+            minHeight: 0,
           }}
         >
-          {/* левая часть: картинка */}
           <Box
             sx={{
-              flex: 2,
-              bgcolor: 'black',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              minHeight: { xs: 240, md: 400 },
+              width: '100%',
+              flexShrink: 0,
+              height: 300,
+              position: 'relative',
+              overflow: 'hidden',
+              backgroundColor: 'background.default',
             }}
           >
             <Box
@@ -114,82 +114,70 @@ const PostTile = ({
               alt={description || 'Photo'}
               loading="lazy"
               sx={{
-                maxWidth: '100%',
-                maxHeight: '80vh',
-                objectFit: 'contain',
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                display: 'block',
               }}
             />
+            <IconButton
+              onClick={handleClosePostModal}
+              size="small"
+              sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                bgcolor: 'rgba(0,0,0,0.4)',
+                color: '#fff',
+                '&:hover': {
+                  bgcolor: 'rgba(0,0,0,0.6)',
+                },
+              }}
+              aria-label="Close"
+            >
+              <CloseIcon />
+            </IconButton>
           </Box>
 
-          {/* правая часть: инфо + комменты */}
+          <Box
+            sx={{
+              flexShrink: 0,
+              px: 2,
+              py: 1.5,
+              borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+            }}
+          >
+            {description && (
+              <Typography
+                variant="body2"
+                sx={{ wordBreak: 'break-word', mb: location ? 0.5 : 0 }}
+              >
+                {description}
+              </Typography>
+            )}
+
+            {location && (
+              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                {location}
+              </Typography>
+            )}
+          </Box>
+
           <Box
             sx={{
               flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              minWidth: 280,
-              maxWidth: 360,
-              bgcolor: 'background.paper',
-              borderLeft: {
-                xs: 'none',
-                md: `1px solid ${theme.palette.divider}`,
-              },
-              p: 2,
-              position: 'relative',
+              minHeight: 0,
+              overflowY: 'auto',
+              px: 2,
+              py: 2,
             }}
           >
-            {/* header с кнопкой закрытия */}
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-              }}
-            >
-              <IconButton
-                onClick={handleClosePostModal}
-                size="small"
-                sx={{
-                  color: 'text.secondary',
-                }}
-                aria-label="Close"
-              >
-                <CloseIcon />
-              </IconButton>
-            </Box>
-
-            {/* описание / локация */}
-            <Stack spacing={1} sx={{ mb: 2 }}>
-              {description && (
-                <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
-                  {description}
-                </Typography>
-              )}
-
-              {location && (
-                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                  {location}
-                </Typography>
-              )}
-            </Stack>
-
-            {/* comments */}
-            <Box
-              sx={{
-                flex: 1,
-                minHeight: 0,
-                overflowY: 'auto',
-                borderRadius: 1,
-                border: `1px solid ${theme.palette.divider}`,
-                p: 1,
-              }}
-            >
-              <Comments
-                postComments={postComments}
-                usersById={usersById}
-                postId={id}
-                className=""
-              />
-            </Box>
+            <Comments
+              postComments={postComments}
+              usersById={usersById}
+              postId={id}
+              className=""
+            />
           </Box>
         </DialogContent>
       </Dialog>

@@ -11,7 +11,7 @@ interface ModalProps {
   children: React.ReactNode
   isOpen: boolean
   handleCloseModal: () => void
-  contentClassName?: string 
+  contentClassName?: string
 }
 
 const Modal = ({ children, isOpen, handleCloseModal }: ModalProps) => {
@@ -34,7 +34,6 @@ const Modal = ({ children, isOpen, handleCloseModal }: ModalProps) => {
       fullWidth
       maxWidth="sm"
       fullScreen={fullScreen}
-      // sx можно настроить, чтобы выглядело ближе к твоему стилю
       PaperProps={{
         sx: {
           borderRadius: 2,
@@ -43,9 +42,6 @@ const Modal = ({ children, isOpen, handleCloseModal }: ModalProps) => {
         },
       }}
     >
-      {/* DialogContent уже даёт паддинги.
-         Мы оборачиваем children в Box просто чтобы ты мог класть формы как раньше
-      */}
       <DialogContent
         sx={{
           display: 'flex',

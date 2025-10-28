@@ -49,7 +49,7 @@ const Comments = ({
 
   return (
     <Box
-      className={className} // чтобы не ломать твой внешний API
+      className={className}
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -106,9 +106,7 @@ const Comments = ({
                   bgcolor: avatar ? undefined : 'primary.main',
                 }}
               >
-                {!avatar
-                  ? username?.[0]?.toUpperCase() ?? 'U'
-                  : undefined}
+                {!avatar ? username?.[0]?.toUpperCase() ?? 'U' : undefined}
               </Avatar>
 
               {/* comment body */}
@@ -177,10 +175,7 @@ const Comments = ({
                         }}
                       >
                         <ReplyIcon sx={{ fontSize: 14 }} />
-                        <Typography
-                          variant="caption"
-                          sx={{ lineHeight: 1 }}
-                        >
+                        <Typography variant="caption" sx={{ lineHeight: 1 }}>
                           Reply
                         </Typography>
                       </Stack>

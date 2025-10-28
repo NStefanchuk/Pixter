@@ -182,11 +182,7 @@ const Profile = () => {
           </Box>
 
           {/* right side info */}
-          <Stack
-            spacing={2}
-            flex={1}
-            sx={{ width: '100%', maxWidth: '100%' }}
-          >
+          <Stack spacing={2} flex={1} sx={{ width: '100%', maxWidth: '100%' }}>
             {/* username + stats */}
             <Box>
               <Typography
@@ -254,10 +250,7 @@ const Profile = () => {
               </Typography>
 
               {user?.createdAt && (
-                <Typography
-                  variant="caption"
-                  sx={{ color: 'text.secondary' }}
-                >
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                   Joined:{' '}
                   {new Date(user.createdAt).toLocaleDateString(undefined, {
                     year: 'numeric',
@@ -309,26 +302,38 @@ const Profile = () => {
               No posts yet
             </Typography>
           ) : (
-            <Grid container spacing={2}>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+                gap: 0.1,
+              }}
+            >
               {posts.map((post) => (
-                <Grid item xs={12} sm={6} md={4} key={post.id}>
-                  <PostTile
-                    id={post.id}
-                    imageUrl={post.imageUrl}
-                    description={post.description}
-                    location={post.location}
-                  />
-                </Grid>
+                <PostTile
+                  key={post.id}
+                  id={post.id}
+                  imageUrl={post.imageUrl}
+                  description={post.description}
+                  location={post.location}
+                />
               ))}
-            </Grid>
+            </Box>
           )}
         </Box>
 
         {/* ===== CREATE POST DIALOG ===== */}
-        <Dialog open={isOpen} onClose={handleCloseModal} fullWidth maxWidth="sm">
+        <Dialog
+          open={isOpen}
+          onClose={handleCloseModal}
+          fullWidth
+          maxWidth="sm"
+        >
           <DialogTitle>Add new post</DialogTitle>
           <Box component="form" onSubmit={handlePostImage}>
-            <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <DialogContent
+              sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+            >
               <TextField
                 id="imageUrl"
                 name="imageUrl"
