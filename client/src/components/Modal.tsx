@@ -11,28 +11,17 @@ interface ModalProps {
   children: React.ReactNode
   isOpen: boolean
   handleCloseModal: () => void
-  contentClassName?: string // мы его сохраним в пропсах ради совместимости, но не будем применять классы
+  contentClassName?: string 
 }
 
-const Modal = ({
-  children,
-  isOpen,
-  handleCloseModal,
-}: ModalProps) => {
+const Modal = ({ children, isOpen, handleCloseModal }: ModalProps) => {
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
-
-  // Поведение Escape уже встроено в MUI Dialog (onClose вызывается).
-  // Блокировка прокрутки body тоже встроена.
 
   const handleClose = (
     _event: object,
     reason: 'backdropClick' | 'escapeKeyDown'
   ) => {
-    // хотим то же поведение, что у тебя было:
-    // - клик по фону закрывает
-    // - Escape закрывает
-    // => оба случая зовут handleCloseModal
     if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
       handleCloseModal()
     }
