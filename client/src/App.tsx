@@ -1,11 +1,11 @@
 import './App.css'
 import { Routes, Route, useLocation } from 'react-router-dom'
-import Authorization from './pages/Authorization'
+import Authorization from './pages/Authorization.mui'
 import { Toaster } from 'react-hot-toast'
-import Profile from './pages/Profile'
-import Main from './pages/Main'
+import Profile from './pages/Profile.mui'
+import Main from './pages/Main.mui'
 import Header from './components/Header'
-import Welcome from './pages/Welcome'
+import Welcome from './pages/Welcome.mui'
 
 function App() {
   const location = useLocation()
