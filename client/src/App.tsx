@@ -4,7 +4,7 @@ import Authorization from './pages/Authorization.mui'
 import { Toaster } from 'react-hot-toast'
 import Profile from './pages/Profile.mui'
 import Main from './pages/Main.mui'
-import Header from './components/Header'
+import Header from './components/Header.mui'
 import Welcome from './pages/Welcome.mui'
 
 function App() {
