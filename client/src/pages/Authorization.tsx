@@ -6,7 +6,7 @@ import { Box, Paper, Typography, Link, Avatar, Divider } from '@mui/material'
 
 import Login from '../components/Login.mui'
 import Registration from '../components/Registration'
-import logoUrl from '../assets/logo.png'
+import logoUrl from '../assets/Logo.svg'
 
 const Authorization = () => {
   const navigate = useNavigate()
@@ -127,13 +127,16 @@ const Authorization = () => {
             gap: 1.5,
           }}
         >
-          <Avatar
+          <Box
+            component="img"
             src={logoUrl}
-            alt="Logo"
+            alt="Pixter logo"
             sx={{
-              width: 56,
-              height: 56,
-              bgcolor: 'transparent',
+              width: 72,
+              height: 'auto',
+              mb: 2,
+              display: 'block',
+              mx: 'auto',
             }}
           />
 
