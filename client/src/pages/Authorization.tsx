@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Login from '../components/Login'
+import Login from '../components/Login.mui'
 import Registration from '../components/Registration'
 import Styles from '../styles/auth.module.css'
 import { toast } from 'react-hot-toast'
