@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-hot-toast'
+
+import { Box, Paper, Typography, Link, Avatar, Divider } from '@mui/material'
+
 import Login from '../components/Login.mui'
 import Registration from '../components/Registration'
-import Styles from '../styles/auth.module.css'
-import { toast } from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
 import logoUrl from '../assets/logo.png'
 
 const Authorization = () => {
@@ -52,8 +54,10 @@ const Authorization = () => {
       })
       const res = await submitData.json()
       console.log(res)
+      toast.success('Account created!')
     } catch (error) {
       console.error(error)
+      toast.error('Registration failed')
     } finally {
       setIsLoading(false)
     }
@@ -92,50 +96,112 @@ const Authorization = () => {
   }
 
   return (
-    <>
-      <div className={Styles.authPage}>
-        <div className={Styles.authCard}>
-          <div className={Styles.authHeader}>
-            <img src={logoUrl} alt="Logo" className={Styles.authLogoImg} />
-            <h1 className={Styles.authTitle}>{text.title}</h1>
-            <p className={Styles.authSubtitle}>{text.subtitle}</p>
-          </div>
-          <form
-            className={Styles.authForm}
-            onSubmit={isLogin ? handleLogin : handleSubmitRegister}
-          >
-            {isLogin ? (
-              <Login
-                isLoading={isLoading}
-                userLogin={userLogin}
-                setUserLogin={setUserLogin}
-              />
-            ) : (
-              <Registration
-                userData={userData}
-                setUserData={setUserData}
-                isLoading={isLoading}
-              />
-            )}
-          </form>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: 2,
+        backgroundColor: 'background.default',
+      }}
+    >
+      <Paper
+        elevation={8}
+        sx={{
+          width: '100%',
+          maxWidth: 400,
+          p: 4,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3,
+          borderRadius: 3,
+        }}
+      >
+        <Box
+          sx={{
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 1.5,
+          }}
+        >
+          <Avatar
+            src={logoUrl}
+            alt="Logo"
+            sx={{
+              width: 56,
+              height: 56,
+              bgcolor: 'transparent',
+            }}
+          />
 
-          <div className={Styles.authFooter}>
-            <p>
-              {text.switchQuestion}
-              <a
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault()
-                  setIsLogin(!isLogin)
-                }}
-              >
-                {text.switchAction}
-              </a>
-            </p>
-          </div>
-        </div>
-      </div>
-    </>
+          <Box>
+            <Typography variant="h5" fontWeight={600} sx={{ lineHeight: 1.2 }}>
+              {text.title}
+            </Typography>
+
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              {text.subtitle}
+            </Typography>
+          </Box>
+        </Box>
+
+        <Divider sx={{ opacity: 0.12 }} />
+
+        <Box
+          component="form"
+          onSubmit={isLogin ? handleLogin : handleSubmitRegister}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}
+        >
+          {isLogin ? (
+            <Login
+              isLoading={isLoading}
+              userLogin={userLogin}
+              setUserLogin={setUserLogin}
+            />
+          ) : (
+            <Registration
+              userData={userData}
+              setUserData={setUserData}
+              isLoading={isLoading}
+            />
+          )}
+        </Box>
+
+        <Box
+          sx={{
+            textAlign: 'center',
+            fontSize: '0.9rem',
+            color: 'text.secondary',
+          }}
+        >
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {text.switchQuestion}{' '}
+            <Link
+              href="#"
+              underline="hover"
+              onClick={(e) => {
+                e.preventDefault()
+                setIsLogin(!isLogin)
+              }}
+              sx={{
+                cursor: 'pointer',
+                fontWeight: 600,
+                color: 'primary.main',
+              }}
+            >
+              {text.switchAction}
+            </Link>
+          </Typography>
+        </Box>
+      </Paper>
+    </Box>
   )
 }
 
