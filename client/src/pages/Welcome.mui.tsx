@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box, Paper, Typography, Button } from '@mui/material'
-import logoUrl from '../assets/Logo_t.svg'
+import { RiCameraLensFill } from 'react-icons/ri'
 
 const Welcome = () => {
   const navigate = useNavigate()
@@ -73,21 +73,22 @@ const Welcome = () => {
       >
         {/* Logo */}
         <Box
-          component="img"
-          src={logoUrl}
-          alt="Pixter logo"
-          loading="eager"
-          decoding="async"
           sx={{
-            width: 164,
-            height: 64,
-            borderRadius: 2,
+            width: 96,
+            height: 96,
             mx: 'auto',
             mb: 2,
-            display: 'block',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '50%',
             filter: 'drop-shadow(0 8px 20px rgba(156,39,176,0.5))',
+            color: 'primary.main',
           }}
-        />
+          aria-label="Pixter logo"
+        >
+          <RiCameraLensFill size={64} />
+        </Box>
 
         {/* Title */}
         <Typography

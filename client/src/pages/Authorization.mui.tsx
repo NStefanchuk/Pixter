@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
-
 import { Box, Paper, Typography, Link, Avatar, Divider } from '@mui/material'
+import { RiCameraLensFill } from 'react-icons/ri'
 
 import Login from '../components/Login.mui'
 import Registration from '../components/Registration.mui'
-import logoUrl from '../assets/Logo.svg'
 
 const Authorization = () => {
   const navigate = useNavigate()
@@ -167,17 +166,21 @@ const Authorization = () => {
           }}
         >
           <Box
-            component="img"
-            src={logoUrl}
-            alt="Pixter logo"
             sx={{
               width: 72,
-              height: 'auto',
+              height: 72,
               mb: 2,
-              display: 'block',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               mx: 'auto',
+              borderRadius: '50%',
+              color: 'primary.main',
             }}
-          />
+            aria-label="Pixter logo"
+          >
+            <RiCameraLensFill size={78} />
+          </Box>
 
           <Box>
             <Typography variant="h5" fontWeight={600} sx={{ lineHeight: 1.2 }}>

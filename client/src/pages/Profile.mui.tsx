@@ -204,7 +204,10 @@ const Profile = () => {
                   </Typography>
                   <Typography
                     variant="caption"
-                    sx={{ color: 'text.secondary' }}
+                    sx={{
+                      color: 'var(--text-primary, rgba(0,0,0,0.87))',
+                      opacity: 0.8,
+                    }}
                   >
                     Posts
                   </Typography>
@@ -216,7 +219,10 @@ const Profile = () => {
                   </Typography>
                   <Typography
                     variant="caption"
-                    sx={{ color: 'text.secondary' }}
+                    sx={{
+                      color: 'var(--text-primary, rgba(0,0,0,0.87))',
+                      opacity: 0.8,
+                    }}
                   >
                     Followers
                   </Typography>
@@ -228,7 +234,10 @@ const Profile = () => {
                   </Typography>
                   <Typography
                     variant="caption"
-                    sx={{ color: 'text.secondary' }}
+                    sx={{
+                      color: 'var(--text-primary, rgba(0,0,0,0.87))',
+                      opacity: 0.8,
+                    }}
                   >
                     Following
                   </Typography>
@@ -244,13 +253,23 @@ const Profile = () => {
 
               <Typography
                 variant="body2"
-                sx={{ color: 'text.secondary', wordBreak: 'break-all' }}
+                sx={{
+                  color: 'var(--text-primary, rgba(0,0,0,0.87))',
+                  opacity: 0.9,
+                  wordBreak: 'break-all',
+                }}
               >
                 {user?.email}
               </Typography>
 
               {user?.createdAt && (
-                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: 'var(--text-primary, rgba(0,0,0,0.87))',
+                    opacity: 0.7,
+                  }}
+                >
                   Joined:{' '}
                   {new Date(user.createdAt).toLocaleDateString(undefined, {
                     year: 'numeric',

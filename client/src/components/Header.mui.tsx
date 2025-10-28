@@ -9,7 +9,7 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material'
-import logo from '../assets/Logo.svg'
+import { RiCameraLensFill } from 'react-icons/ri'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import LightModeIcon from '@mui/icons-material/LightMode'
 
@@ -91,17 +91,19 @@ const Header = () => {
           }}
         >
           <Box
-            component="img"
-            src={logo}
-            alt="Pixter logo"
             sx={{
               width: 42,
               height: 42,
               borderRadius: 1,
-              display: 'block',
-              boxShadow: '0 8px 20px rgba(156,39,176,0.4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'primary.main',
             }}
-          />
+            aria-label="Pixter logo"
+          >
+            <RiCameraLensFill size={48} />
+          </Box>
 
           <Typography
             variant="h5"

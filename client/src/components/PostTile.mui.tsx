@@ -15,14 +15,13 @@ import {
 import CloseIcon from '@mui/icons-material/Close'
 
 import Comments from './Comments.mui'
-import { type User, type Comment } from '../utils/types'
+import { type Comment } from '../utils/types'
 
 interface PostProps {
   id: string
   imageUrl: string
   description?: string
   location?: string
-  usersById?: Map<User['id'], User>
   postComments?: Comment[]
 }
 
@@ -31,7 +30,6 @@ const PostTile = ({
   imageUrl,
   description,
   location,
-  usersById = new Map<User['id'], User>(),
   postComments = [],
 }: PostProps) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -175,12 +173,7 @@ const PostTile = ({
               py: 2,
             }}
           >
-            <Comments
-              postComments={postComments}
-              usersById={usersById}
-              postId={id}
-              className=""
-            />
+            <Comments postComments={postComments} postId={id} className="" />
           </Box>
         </DialogContent>
       </Dialog>

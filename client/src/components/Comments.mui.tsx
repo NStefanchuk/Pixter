@@ -323,23 +323,44 @@ const Comments = ({
           variant="outlined"
           size="small"
           fullWidth
-          InputProps={{
-            sx: {
-              fontSize: '0.9rem',
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              bgcolor: 'var(--bg-paper, #fff)',
+              color: 'var(--text-primary, rgba(0,0,0,0.87))',
+              '& .MuiInputBase-input::placeholder': {
+                color: 'var(--text-secondary, rgba(0,0,0,0.6))',
+                opacity: 1,
+              },
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'var(--divider, rgba(0,0,0,0.23))',
+              },
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'var(--text-secondary, rgba(0,0,0,0.6))',
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'primary.main',
+              },
             },
           }}
         />
 
         <Button
           type="submit"
-          variant="text"
+          variant="contained"
+          color="primary"
           size="small"
           disabled={isSubmitting || !newContent.trim()}
           sx={{
             textTransform: 'none',
             fontWeight: 600,
             minWidth: 'auto',
-            px: 1,
+            px: 1.5,
+            borderRadius: 1,
+            // нормальное состояние пусть будет просто primary
+            '&.Mui-disabled': {
+              bgcolor: 'rgba(0,0,0,0.06)', // светло-серый фон в лайт теме
+              color: 'text.disabled',
+            },
           }}
         >
           Send

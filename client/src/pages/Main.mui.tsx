@@ -103,7 +103,7 @@ const Main = () => {
                     sx={{
                       lineHeight: 1.2,
                       wordBreak: 'break-word',
-                      color: 'text.primary',
+                      color: 'var(--text-primary, rgba(0,0,0,0.87))',
                     }}
                   >
                     {author?.username || 'Unknown'}
@@ -113,7 +113,7 @@ const Main = () => {
                     <Typography
                       variant="caption"
                       sx={{
-                        color: 'text.secondary',
+                        color: 'var(--text-secondary, rgba(0,0,0,0.6))',
                         lineHeight: 1.2,
                         display: 'block',
                       }}
@@ -130,7 +130,7 @@ const Main = () => {
                     <Typography
                       variant="caption"
                       sx={{
-                        color: 'text.secondary',
+                        color: 'var(--text-secondary, rgba(0,0,0,0.6))',
                         lineHeight: 1.2,
                         display: 'block',
                       }}
