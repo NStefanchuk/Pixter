@@ -1,22 +1,53 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-  Box,
-  Paper,
-  Typography,
-  Button,
-} from '@mui/material'
+import { Box, Paper, Typography, Button } from '@mui/material'
 import logoUrl from '../assets/Logo_t.svg'
 
 const Welcome = () => {
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const stored =
+      typeof window !== 'undefined'
+        ? localStorage.getItem('color-scheme')
+        : null
+    const prefersDark =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+    const mode =
+      stored === 'light' || stored === 'dark'
+        ? stored
+        : prefersDark
+        ? 'dark'
+        : 'light'
+    const root = document.documentElement
+    root.setAttribute('data-color-scheme', mode)
+    const setVar = (k: string, v: string) => root.style.setProperty(k, v)
+    if (mode === 'dark') {
+      setVar('--bg-paper', '#1e1e1e')
+      setVar('--bg-default', '#121212')
+      setVar('--text-primary', 'rgba(255,255,255,0.87)')
+      setVar('--text-secondary', 'rgba(255,255,255,0.6)')
+      setVar('--text-disabled', 'rgba(255,255,255,0.38)')
+      setVar('--divider', 'rgba(255,255,255,0.12)')
+    } else {
+      setVar('--bg-paper', '#ffffff')
+      setVar('--bg-default', '#fafafa')
+      setVar('--text-primary', 'rgba(0,0,0,0.87)')
+      setVar('--text-secondary', 'rgba(0,0,0,0.6)')
+      setVar('--text-disabled', 'rgba(0,0,0,0.38)')
+      setVar('--divider', 'rgba(0,0,0,0.12)')
+    }
+  }, [])
 
   return (
     <Box
       component="main"
       sx={{
         minHeight: '100vh',
-        bgcolor: 'background.default',
-        color: 'text.primary',
+        bgcolor: 'var(--bg-default, #fafafa)',
+        color: 'var(--text-primary, rgba(0,0,0,0.87))',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -30,11 +61,11 @@ const Welcome = () => {
           width: '100%',
           maxWidth: 400,
           textAlign: 'center',
-          bgcolor: 'background.paper',
-          color: 'text.primary',
+          bgcolor: 'var(--bg-paper, #fff)',
+          color: 'var(--text-primary, rgba(0,0,0,0.87))',
           borderRadius: 3,
           border: '1px solid',
-          borderColor: 'divider',
+          borderColor: 'var(--divider, rgba(0,0,0,0.12))',
           boxShadow: '0px 32px 64px rgba(0,0,0,0.8)',
           px: 3,
           py: 4,
@@ -72,12 +103,12 @@ const Welcome = () => {
           variant="body2"
           sx={{
             mb: 3,
-            color: 'text.secondary',
+            color: 'var(--text-secondary, rgba(0,0,0,0.6))',
             lineHeight: 1.5,
           }}
         >
-          A social hub for photographers — share your work, get feedback,
-          and grow together.
+          A social hub for photographers — share your work, get feedback, and
+          grow together.
         </Typography>
 
         {/* CTA Button */}
@@ -102,7 +133,7 @@ const Welcome = () => {
           sx={{
             display: 'block',
             mt: 2.5,
-            color: 'text.secondary',
+            color: 'var(--text-secondary, rgba(0,0,0,0.6))',
           }}
         >
           Join now and be part of a creative community.

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 
@@ -95,6 +95,41 @@ const Authorization = () => {
     }
   }
 
+  useEffect(() => {
+    const stored =
+      typeof window !== 'undefined'
+        ? localStorage.getItem('color-scheme')
+        : null
+    const prefersDark =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+    const mode =
+      stored === 'light' || stored === 'dark'
+        ? stored
+        : prefersDark
+        ? 'dark'
+        : 'light'
+    const root = document.documentElement
+    root.setAttribute('data-color-scheme', mode)
+    const setVar = (k: string, v: string) => root.style.setProperty(k, v)
+    if (mode === 'dark') {
+      setVar('--bg-paper', '#1e1e1e')
+      setVar('--bg-default', '#121212')
+      setVar('--text-primary', 'rgba(255,255,255,0.87)')
+      setVar('--text-secondary', 'rgba(255,255,255,0.6)')
+      setVar('--text-disabled', 'rgba(255,255,255,0.38)')
+      setVar('--divider', 'rgba(255,255,255,0.12)')
+    } else {
+      setVar('--bg-paper', '#ffffff')
+      setVar('--bg-default', '#fafafa')
+      setVar('--text-primary', 'rgba(0,0,0,0.87)')
+      setVar('--text-secondary', 'rgba(0,0,0,0.6)')
+      setVar('--text-disabled', 'rgba(0,0,0,0.38)')
+      setVar('--divider', 'rgba(0,0,0,0.12)')
+    }
+  }, [])
+
   return (
     <Box
       sx={{
@@ -103,7 +138,7 @@ const Authorization = () => {
         alignItems: 'center',
         justifyContent: 'center',
         p: 2,
-        backgroundColor: 'background.default',
+        backgroundColor: 'var(--bg-default, #fafafa)',
       }}
     >
       <Paper
@@ -116,6 +151,10 @@ const Authorization = () => {
           flexDirection: 'column',
           gap: 3,
           borderRadius: 3,
+          bgcolor: 'var(--bg-paper, #fff)',
+          color: 'var(--text-primary, rgba(0,0,0,0.87))',
+          border: '1px solid',
+          borderColor: 'var(--divider, rgba(0,0,0,0.12))',
         }}
       >
         <Box
@@ -145,7 +184,10 @@ const Authorization = () => {
               {text.title}
             </Typography>
 
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            <Typography
+              variant="body2"
+              sx={{ color: 'var(--text-secondary, rgba(0,0,0,0.6))' }}
+            >
               {text.subtitle}
             </Typography>
           </Box>
@@ -181,10 +223,13 @@ const Authorization = () => {
           sx={{
             textAlign: 'center',
             fontSize: '0.9rem',
-            color: 'text.secondary',
+            color: 'var(--text-secondary, rgba(0,0,0,0.6))',
           }}
         >
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          <Typography
+            variant="body2"
+            sx={{ color: 'var(--text-secondary, rgba(0,0,0,0.6))' }}
+          >
             {text.switchQuestion}{' '}
             <Link
               href="#"

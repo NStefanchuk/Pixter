@@ -37,7 +37,7 @@ const Modal = ({ children, isOpen, handleCloseModal }: ModalProps) => {
       PaperProps={{
         sx: {
           borderRadius: 2,
-          bgcolor: 'background.paper',
+          bgcolor: 'var(--bg-paper)',
           boxShadow: 24,
         },
       }}

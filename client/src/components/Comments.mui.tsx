@@ -55,10 +55,10 @@ const Comments = ({
         height: '100%',
         minHeight: 0,
         fontSize: '0.9rem',
-        bgcolor: 'background.paper',
+        bgcolor: 'var(--bg-paper)',
         borderRadius: 1,
         border: '1px solid',
-        borderColor: 'divider',
+        borderColor: 'var(--divider)',
       }}
     >
       <Box
@@ -82,8 +82,8 @@ const Comments = ({
               minWidth: 'auto',
               textTransform: 'none',
               fontSize: '0.8rem',
-              color: 'text.secondary',
-              '&:hover': { color: 'text.primary' },
+              color: 'var(--text-secondary)',
+              '&:hover': { color: 'var(--text-primary)' },
               mb: 1,
             }}
           >
@@ -135,7 +135,7 @@ const Comments = ({
                     <Typography
                       variant="subtitle2"
                       fontWeight={600}
-                      sx={{ lineHeight: 1.2 }}
+                      sx={{ lineHeight: 1.2, color: 'var(--text-primary)' }}
                     >
                       {username}
                     </Typography>
@@ -143,7 +143,7 @@ const Comments = ({
                     <Typography
                       variant="caption"
                       sx={{
-                        color: 'text.secondary',
+                        color: 'var(--text-secondary)',
                         display: 'flex',
                         alignItems: 'center',
                         gap: 1,
@@ -167,7 +167,7 @@ const Comments = ({
                           width: 4,
                           height: 4,
                           borderRadius: '50%',
-                          bgcolor: 'text.disabled',
+                          bgcolor: 'var(--text-disabled)',
                           display: 'inline-block',
                         }}
                       />
@@ -175,7 +175,7 @@ const Comments = ({
                       <Stack
                         direction="row"
                         spacing={1}
-                        sx={{ color: 'text.secondary' }}
+                        sx={{ color: 'var(--text-secondary)' }}
                       >
                         <Stack
                           direction="row"
@@ -183,7 +183,7 @@ const Comments = ({
                           alignItems="center"
                           sx={{
                             cursor: 'pointer',
-                            '&:hover': { color: 'text.primary' },
+                            '&:hover': { color: 'var(--text-primary)' },
                             fontSize: '0.7rem',
                             lineHeight: 1,
                           }}
@@ -201,7 +201,7 @@ const Comments = ({
                   <Typography
                     variant="body2"
                     sx={{
-                      color: 'text.primary',
+                      color: 'var(--text-primary)',
                       whiteSpace: 'pre-wrap',
                       wordBreak: 'break-word',
                       mt: 0.5,
@@ -219,7 +219,7 @@ const Comments = ({
                     alignItems="center"
                     sx={{
                       mt: 0.5,
-                      color: 'text.secondary',
+                      color: 'var(--text-secondary)',
                       fontSize: '0.8rem',
                     }}
                   >
@@ -229,14 +229,14 @@ const Comments = ({
                       spacing={0.5}
                       sx={{
                         cursor: 'pointer',
-                        '&:hover': { color: 'text.primary' },
+                        '&:hover': { color: 'var(--text-primary)' },
                       }}
                     >
                       <IconButton
                         size="small"
                         sx={{
                           p: 0,
-                          color: 'text.secondary',
+                          color: 'var(--text-secondary)',
                           '&:hover': { color: 'primary.main' },
                         }}
                       >
@@ -249,7 +249,7 @@ const Comments = ({
                       variant="caption"
                       sx={{
                         cursor: 'pointer',
-                        '&:hover': { color: 'text.primary' },
+                        '&:hover': { color: 'var(--text-primary)' },
                       }}
                     >
                       Reply
@@ -264,7 +264,7 @@ const Comments = ({
             <Typography
               variant="body2"
               sx={{
-                color: 'text.secondary',
+                color: 'var(--text-secondary)',
                 textAlign: 'center',
                 py: 4,
               }}

@@ -135,8 +135,8 @@ const Profile = () => {
     <Box
       sx={{
         minHeight: '100vh',
-        bgcolor: 'background.default',
-        color: 'text.primary',
+        bgcolor: 'var(--bg-default, #fafafa)',
+        color: 'var(--text-primary, rgba(0,0,0,0.87))',
         py: 4,
         px: 2,
         display: 'flex',
@@ -292,13 +292,16 @@ const Profile = () => {
               direction="row"
               alignItems="center"
               spacing={1}
-              sx={{ color: 'text.secondary' }}
+              sx={{ color: 'var(--text-secondary, rgba(0,0,0,0.6))' }}
             >
               <CircularProgress size={20} />
               <Typography variant="body2">Loading…</Typography>
             </Stack>
           ) : posts.length === 0 ? (
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            <Typography
+              variant="body2"
+              sx={{ color: 'var(--text-secondary, rgba(0,0,0,0.6))' }}
+            >
               No posts yet
             </Typography>
           ) : (

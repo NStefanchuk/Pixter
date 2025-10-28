@@ -2,14 +2,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { getComments, getPosts } from '../utils/api'
 import { type Post, type Comment } from '../utils/types'
 
-import {
-  Box,
-  Card,
-  Avatar,
-  Typography,
-  Stack,
-  Divider,
-} from '@mui/material'
+import { Box, Card, Avatar, Typography, Stack, Divider } from '@mui/material'
 
 import Comments from '../components/Comments.mui'
 
@@ -44,8 +37,8 @@ const Main = () => {
     <Box
       sx={{
         minHeight: '100vh',
-        bgcolor: 'background.default',
-        color: 'text.primary',
+        bgcolor: 'var(--bg-default, #fafafa)',
+        color: 'var(--text-primary, rgba(0,0,0,0.87))',
         display: 'flex',
         justifyContent: 'center',
         px: 2,
@@ -73,9 +66,9 @@ const Main = () => {
               variant="outlined"
               sx={{
                 borderRadius: 2,
-                bgcolor: 'background.paper', // тёмно-серый в dark theme
+                bgcolor: 'var(--bg-paper, #fff)',
                 border: '1px solid',
-                borderColor: 'divider',
+                borderColor: 'var(--divider, rgba(0,0,0,0.12))',
                 boxShadow: '0px 24px 64px rgba(0,0,0,0.8)',
                 overflow: 'hidden',
               }}

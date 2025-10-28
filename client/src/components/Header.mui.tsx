@@ -1,17 +1,67 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AppBar, Toolbar, Box, Typography, Button } from '@mui/material'
+import {
+  AppBar,
+  Toolbar,
+  Box,
+  Typography,
+  Button,
+  IconButton,
+  Tooltip,
+} from '@mui/material'
 import logo from '../assets/Logo.svg'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import LightModeIcon from '@mui/icons-material/LightMode'
 
 const Header = () => {
+  const [mode, setMode] = useState<'light' | 'dark'>(() => {
+    const stored =
+      typeof window !== 'undefined'
+        ? localStorage.getItem('color-scheme')
+        : null
+    if (stored === 'light' || stored === 'dark') return stored
+    const prefersDark =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+    return prefersDark ? 'dark' : 'light'
+  })
+
+  useEffect(() => {
+    const root = document.documentElement
+    root.setAttribute('data-color-scheme', mode)
+    const setVar = (k: string, v: string) => root.style.setProperty(k, v)
+    if (mode === 'dark') {
+      setVar('--bg-paper', '#1e1e1e')
+      setVar('--bg-default', '#121212')
+      setVar('--text-primary', 'rgba(255,255,255,0.87)')
+      setVar('--text-secondary', 'rgba(255,255,255,0.6)')
+      setVar('--text-disabled', 'rgba(255,255,255,0.38)')
+      setVar('--divider', 'rgba(255,255,255,0.12)')
+    } else {
+      setVar('--bg-paper', '#ffffff')
+      setVar('--bg-default', '#fafafa')
+      setVar('--text-primary', 'rgba(0,0,0,0.87)')
+      setVar('--text-secondary', 'rgba(0,0,0,0.6)')
+      setVar('--text-disabled', 'rgba(0,0,0,0.38)')
+      setVar('--divider', 'rgba(0,0,0,0.12)')
+    }
+    try {
+      localStorage.setItem('color-scheme', mode)
+    } catch {}
+  }, [mode])
+
+  const toggleMode = () => setMode((m) => (m === 'light' ? 'dark' : 'light'))
+
   return (
     <AppBar
       position="static"
       elevation={4}
       sx={{
-        bgcolor: 'background.paper',
-        color: 'text.primary',
+        bgcolor: 'var(--bg-paper)',
+        color: 'var(--text-primary)',
         borderBottom: '1px solid',
-        borderColor: 'divider',
+        borderColor: 'var(--divider)',
       }}
     >
       <Toolbar
@@ -59,7 +109,7 @@ const Header = () => {
             sx={{
               fontWeight: 600,
               lineHeight: 1,
-              color: 'text.primary',
+              color: 'var(--text-primary)',
             }}
           >
             Pixter
@@ -81,7 +131,7 @@ const Header = () => {
             variant="text"
             size="small"
             sx={{
-              color: 'text.primary',
+              color: 'var(--text-primary)',
               textTransform: 'none',
               fontWeight: 500,
               fontSize: '0.9rem',
@@ -94,6 +144,25 @@ const Header = () => {
           >
             Profile
           </Button>
+
+          <Tooltip
+            title={
+              mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+            }
+          >
+            <IconButton
+              onClick={toggleMode}
+              size="small"
+              aria-label="Toggle color mode"
+              sx={{ ml: 0.5, color: 'var(--text-primary)' }}
+            >
+              {mode === 'dark' ? (
+                <LightModeIcon fontSize="small" />
+              ) : (
+                <DarkModeIcon fontSize="small" />
+              )}
+            </IconButton>
+          </Tooltip>
         </Box>
       </Toolbar>
     </AppBar>

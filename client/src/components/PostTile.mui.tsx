@@ -50,7 +50,7 @@ const PostTile = ({
       <Card
         variant="outlined"
         sx={{
-          bgcolor: 'background.paper',
+          bgcolor: 'var(--bg-paper)',
           borderRadius: 2,
           boxShadow: 3,
           overflow: 'hidden',
@@ -81,7 +81,7 @@ const PostTile = ({
           sx: {
             borderRadius: fullScreen ? 0 : 2,
             overflow: 'hidden',
-            bgcolor: 'background.paper',
+            bgcolor: 'var(--bg-paper)',
             height: fullScreen ? '100vh' : 600,
             maxHeight: fullScreen ? '100vh' : 600,
             display: 'flex',
@@ -105,7 +105,7 @@ const PostTile = ({
               height: 300,
               position: 'relative',
               overflow: 'hidden',
-              backgroundColor: 'background.default',
+              backgroundColor: 'var(--bg-default)',
             }}
           >
             <Box
@@ -144,7 +144,7 @@ const PostTile = ({
               flexShrink: 0,
               px: 2,
               py: 1.5,
-              borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+              borderBottom: (theme) => `1px solid var(--divider)`,
             }}
           >
             {description && (
@@ -157,7 +157,10 @@ const PostTile = ({
             )}
 
             {location && (
-              <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+              <Typography
+                variant="caption"
+                sx={{ color: 'var(--text-secondary)' }}
+              >
                 {location}
               </Typography>
             )}
