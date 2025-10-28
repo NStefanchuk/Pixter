@@ -27,8 +27,9 @@ const Login = ({ userLogin, setUserLogin, isLoading }: TLoginProps) => {
       }}
     >
       <TextField
+        placeholder="Email"
         label="Email"
-        type="email"
+        type="text"
         name="email"
         value={userLogin.email}
         onChange={handleChangeUserData}
@@ -38,6 +39,7 @@ const Login = ({ userLogin, setUserLogin, isLoading }: TLoginProps) => {
       />
 
       <TextField
+        placeholder="Password"
         label="Password"
         type="password"
         name="password"
@@ -49,6 +51,7 @@ const Login = ({ userLogin, setUserLogin, isLoading }: TLoginProps) => {
       />
 
       <Button
+        type="submit"
         variant="contained"
         size="large"
         disabled={isLoading}

@@ -1,11 +1,24 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getPosts, getUser, createPost } from '../utils/api'
-import Styles from '../styles/profile.module.css'
-import Modal from '../components/Modal'
-import ModalStyles from '../styles/modal.module.css'
 import PostTile from '../components/PostTile'
 import { type Post } from '../utils/types'
+
+import {
+  Box,
+  Avatar,
+  Typography,
+  Stack,
+  Grid,
+  Button,
+  Divider,
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  DialogActions,
+} from '@mui/material'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -18,6 +31,7 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // auth check + load user
   useEffect(() => {
     const authRaw = localStorage.getItem('pixter:auth')
     if (!authRaw) {
@@ -38,6 +52,7 @@ const Profile = () => {
     fetchUser()
   }, [navigate])
 
+  // load posts for this user
   useEffect(() => {
     const fetchMyPosts = async () => {
       if (!user) return
@@ -117,138 +132,246 @@ const Profile = () => {
   }
 
   return (
-    <>
-      <div className={Styles.profilePage}>
-        <div className={Styles.profileContainer}>
-          <div className={Styles.profileHeader}>
-            <div className={Styles.profileAvatar}>
-              {user?.avatarUrl ? (
-                <img
-                  className={Styles.avatarImg}
-                  src={user.avatarUrl}
-                  alt={`${user.username} avatar`}
-                />
-              ) : (
-                <div className={Styles.avatarFallback} aria-hidden>
-                  {user?.username?.[0]?.toUpperCase()}
-                </div>
-              )}
-            </div>
-
-            <div className={Styles.profileInfo}>
-              <div className={Styles.profileTopRow}>
-                <h1 className={Styles.username}>{user?.username}</h1>
-              </div>
-
-              <div className={Styles.stats}>
-                <div className={Styles.stat}>
-                  <span className={Styles.statValue}>
-                    {user?.postsCount ?? 0}
-                  </span>
-                  <span className={Styles.statLabel}>Posts</span>
-                </div>
-                <div className={Styles.stat}>
-                  <span className={Styles.statValue}>
-                    {user?.followersCount}
-                  </span>
-                  <span className={Styles.statLabel}>Followers</span>
-                </div>
-                <div className={Styles.stat}>
-                  <span className={Styles.statValue}>
-                    {user?.followingCount}
-                  </span>
-                  <span className={Styles.statLabel}>Following</span>
-                </div>
-              </div>
-
-              <p className={Styles.bio}>{user?.bio ?? ''}</p>
-              <p className={Styles.email}>{user?.email}</p>
-              <p className={Styles.meta}>
-                {user?.createdAt
-                  ? `Joined: ${new Date(user.createdAt).toLocaleDateString()}`
-                  : null}
-              </p>
-
-              <div className={Styles.profileActions}>
-                <button className={Styles.logoutBtn} onClick={handleLogout}>
-                  Logout
-                </button>
-                <button className={Styles.logoutBtn} onClick={handleOpenModal}>
-                  Add new post
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <section className={Styles.profilePosts}>
-            {isLoading ? (
-              <p>«Loading…»</p>
-            ) : posts.length === 0 ? (
-              <p>«No posts yet»</p>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        bgcolor: 'background.default',
+        color: 'text.primary',
+        py: 4,
+        px: 2,
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      <Box
+        sx={{
+          width: '100%',
+          maxWidth: 900,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 4,
+        }}
+      >
+        {/* ===== PROFILE HEADER ===== */}
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={3}
+          alignItems={{ xs: 'center', sm: 'flex-start' }}
+        >
+          {/* avatar */}
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            {user?.avatarUrl ? (
+              <Avatar
+                src={user.avatarUrl}
+                alt={`${user?.username} avatar`}
+                sx={{ width: 96, height: 96, fontSize: 32, fontWeight: 600 }}
+              />
             ) : (
-              posts.map((post) => (
-                <PostTile
-                  key={post.id}
-                  id={post.id}
-                  imageUrl={post.imageUrl}
-                  description={post.description}
-                  location={post.location}
-                />
-              ))
+              <Avatar
+                sx={{
+                  width: 96,
+                  height: 96,
+                  fontSize: 32,
+                  fontWeight: 600,
+                  bgcolor: 'primary.main',
+                }}
+              >
+                {user?.username?.[0]?.toUpperCase() ?? '?'}
+              </Avatar>
             )}
-          </section>
-        </div>
-      </div>
+          </Box>
 
-      {isOpen && (
-        <Modal isOpen={isOpen} handleCloseModal={handleCloseModal}>
-          <form onSubmit={handlePostImage}>
-            <div className={ModalStyles.formRow}>
-              <label className={ModalStyles.label} htmlFor="imageUrl">
-                Image URL *
-              </label>
-              <input
+          {/* right side info */}
+          <Stack
+            spacing={2}
+            flex={1}
+            sx={{ width: '100%', maxWidth: '100%' }}
+          >
+            {/* username + stats */}
+            <Box>
+              <Typography
+                variant="h5"
+                fontWeight={600}
+                sx={{ wordBreak: 'break-word' }}
+              >
+                {user?.username ?? '—'}
+              </Typography>
+
+              <Stack
+                direction="row"
+                spacing={3}
+                sx={{ mt: 1, flexWrap: 'wrap' }}
+              >
+                <Box>
+                  <Typography variant="subtitle1" fontWeight={600}>
+                    {user?.postsCount ?? 0}
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    sx={{ color: 'text.secondary' }}
+                  >
+                    Posts
+                  </Typography>
+                </Box>
+
+                <Box>
+                  <Typography variant="subtitle1" fontWeight={600}>
+                    {user?.followersCount ?? 0}
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    sx={{ color: 'text.secondary' }}
+                  >
+                    Followers
+                  </Typography>
+                </Box>
+
+                <Box>
+                  <Typography variant="subtitle1" fontWeight={600}>
+                    {user?.followingCount ?? 0}
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    sx={{ color: 'text.secondary' }}
+                  >
+                    Following
+                  </Typography>
+                </Box>
+              </Stack>
+            </Box>
+
+            {/* bio / email / join date */}
+            <Box sx={{ maxWidth: 500 }}>
+              {user?.bio ? (
+                <Typography variant="body2">{user.bio}</Typography>
+              ) : null}
+
+              <Typography
+                variant="body2"
+                sx={{ color: 'text.secondary', wordBreak: 'break-all' }}
+              >
+                {user?.email}
+              </Typography>
+
+              {user?.createdAt && (
+                <Typography
+                  variant="caption"
+                  sx={{ color: 'text.secondary' }}
+                >
+                  Joined:{' '}
+                  {new Date(user.createdAt).toLocaleDateString(undefined, {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })}
+                </Typography>
+              )}
+            </Box>
+
+            {/* actions */}
+            <Stack direction="row" spacing={2}>
+              <Button
+                variant="outlined"
+                color="inherit"
+                size="small"
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
+
+              <Button
+                variant="contained"
+                size="small"
+                onClick={handleOpenModal}
+              >
+                Add new post
+              </Button>
+            </Stack>
+          </Stack>
+        </Stack>
+
+        <Divider sx={{ opacity: 0.15 }} />
+
+        {/* ===== POSTS GRID (пока черновик, без CSS) ===== */}
+        <Box>
+          {isLoading ? (
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={1}
+              sx={{ color: 'text.secondary' }}
+            >
+              <CircularProgress size={20} />
+              <Typography variant="body2">Loading…</Typography>
+            </Stack>
+          ) : posts.length === 0 ? (
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              No posts yet
+            </Typography>
+          ) : (
+            <Grid container spacing={2}>
+              {posts.map((post) => (
+                <Grid item xs={12} sm={6} md={4} key={post.id}>
+                  <PostTile
+                    id={post.id}
+                    imageUrl={post.imageUrl}
+                    description={post.description}
+                    location={post.location}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </Box>
+
+        {/* ===== CREATE POST DIALOG ===== */}
+        <Dialog open={isOpen} onClose={handleCloseModal} fullWidth maxWidth="sm">
+          <DialogTitle>Add new post</DialogTitle>
+          <Box component="form" onSubmit={handlePostImage}>
+            <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <TextField
                 id="imageUrl"
                 name="imageUrl"
-                value={imageUrl}
+                label="Image URL *"
                 type="url"
                 placeholder="https://example.com/photo.jpg"
-                className={ModalStyles.input}
+                value={imageUrl}
                 onChange={handleImageUrl}
+                fullWidth
+                required
               />
-            </div>
 
-            <div className={ModalStyles.formRow}>
-              <label className={ModalStyles.label} htmlFor="description">
-                Description (optional)
-              </label>
-              <textarea
+              <TextField
                 id="description"
                 name="description"
+                label="Description (optional)"
                 placeholder="Add a short description…"
-                className={ModalStyles.textarea}
+                multiline
+                rows={3}
+                fullWidth
               />
-            </div>
-            <div className={ModalStyles.actions}>
-              <button
-                className={ModalStyles.secondaryBtn}
+            </DialogContent>
+
+            <DialogActions sx={{ p: 2 }}>
+              <Button
                 onClick={handleCloseModal}
-                type="button"
+                color="inherit"
+                disabled={isSubmitting}
               >
                 Close
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
-                className={ModalStyles.primaryBtn}
+                variant="contained"
                 disabled={isSubmitting || imageUrl.trim() === ''}
               >
-                Add
-              </button>
-            </div>
-          </form>
-        </Modal>
-      )}
-    </>
+                {isSubmitting ? 'Adding…' : 'Add'}
+              </Button>
+            </DialogActions>
+          </Box>
+        </Dialog>
+      </Box>
+    </Box>
   )
 }
 
