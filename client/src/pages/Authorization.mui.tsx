@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast'
 import { Box, Paper, Typography, Link, Avatar, Divider } from '@mui/material'
 
 import Login from '../components/Login.mui'
-import Registration from '../components/Registration'
+import Registration from '../components/Registration.mui'
 import logoUrl from '../assets/Logo.svg'
 
 const Authorization = () => {
