@@ -1,63 +1,82 @@
-import { useEffect, type ReactNode } from 'react'
-import { createPortal } from 'react-dom'
-import Styles from '../styles/modal.module.css'
+import * as React from 'react'
+import {
+  Dialog,
+  DialogContent,
+  useMediaQuery,
+  useTheme,
+  Box,
+} from '@mui/material'
 
 interface ModalProps {
-  children: ReactNode
+  children: React.ReactNode
   isOpen: boolean
   handleCloseModal: () => void
-  contentClassName?: string
+  contentClassName?: string // мы его сохраним в пропсах ради совместимости, но не будем применять классы
 }
 
 const Modal = ({
   children,
   isOpen,
   handleCloseModal,
-  contentClassName,
 }: ModalProps) => {
-  useEffect(() => {
-    if (!isOpen) return
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') handleCloseModal()
-    }
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [isOpen, handleCloseModal])
+  const theme = useTheme()
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
-  useEffect(() => {
-    const prev = document.body.style.overflow
-    if (isOpen) document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = prev
-    }
-  }, [isOpen])
+  // Поведение Escape уже встроено в MUI Dialog (onClose вызывается).
+  // Блокировка прокрутки body тоже встроена.
 
-  const handleModalOverlayClose = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.currentTarget === e.target) {
+  const handleClose = (
+    _event: object,
+    reason: 'backdropClick' | 'escapeKeyDown'
+  ) => {
+    // хотим то же поведение, что у тебя было:
+    // - клик по фону закрывает
+    // - Escape закрывает
+    // => оба случая зовут handleCloseModal
+    if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
       handleCloseModal()
     }
   }
-  if (!isOpen) return null
-  const modalElement = document.getElementById('modal')
-  if (!modalElement) {
-    console.warn('Modal root element with id="modal" not found in the DOM.')
-    return null
-  }
-  return createPortal(
-    <div
-      onClick={handleModalOverlayClose}
-      role="dialog"
-      aria-modal="true"
-      className={Styles.overlay}
+
+  return (
+    <Dialog
+      open={isOpen}
+      onClose={handleClose}
+      fullWidth
+      maxWidth="sm"
+      fullScreen={fullScreen}
+      // sx можно настроить, чтобы выглядело ближе к твоему стилю
+      PaperProps={{
+        sx: {
+          borderRadius: 2,
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+        },
+      }}
     >
-      <div
-        className={`${Styles.content} ${contentClassName ?? ''}`}
-        role="document"
+      {/* DialogContent уже даёт паддинги.
+         Мы оборачиваем children в Box просто чтобы ты мог класть формы как раньше
+      */}
+      <DialogContent
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+          p: 3,
+        }}
       >
-        {children}
-      </div>
-    </div>,
-    modalElement
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}
+        >
+          {children}
+        </Box>
+      </DialogContent>
+    </Dialog>
   )
 }
 
