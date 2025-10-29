@@ -19,6 +19,7 @@ import {
   TextField,
   DialogActions,
 } from '@mui/material'
+import ProfileHeader from '../components/ProfileHeader.mui'
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -178,155 +179,11 @@ const Profile = () => {
           gap: 4,
         }}
       >
-        {/* ===== PROFILE HEADER ===== */}
-        <Stack
-          direction={{ xs: 'column', sm: 'row' }}
-          spacing={3}
-          alignItems={{ xs: 'center', sm: 'flex-start' }}
-        >
-          {/* avatar */}
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            {user?.avatarUrl ? (
-              <Avatar
-                src={user.avatarUrl}
-                alt={`${user?.username} avatar`}
-                sx={{ width: 96, height: 96, fontSize: 32, fontWeight: 600 }}
-              />
-            ) : (
-              <Avatar
-                sx={{
-                  width: 96,
-                  height: 96,
-                  fontSize: 32,
-                  fontWeight: 600,
-                  bgcolor: 'primary.main',
-                }}
-              >
-                {user?.username?.[0]?.toUpperCase() ?? '?'}
-              </Avatar>
-            )}
-          </Box>
-
-          {/* right side info */}
-          <Stack spacing={2} flex={1} sx={{ width: '100%', maxWidth: '100%' }}>
-            {/* username + stats */}
-            <Box>
-              <Typography
-                variant="h5"
-                fontWeight={600}
-                sx={{ wordBreak: 'break-word' }}
-              >
-                {user?.username ?? '—'}
-              </Typography>
-
-              <Stack
-                direction="row"
-                spacing={3}
-                sx={{ mt: 1, flexWrap: 'wrap' }}
-              >
-                <Box>
-                  <Typography variant="subtitle1" fontWeight={600}>
-                    {user?.postsCount ?? 0}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      color: 'var(--text-primary, rgba(0,0,0,0.87))',
-                      opacity: 0.8,
-                    }}
-                  >
-                    Posts
-                  </Typography>
-                </Box>
-
-                <Box>
-                  <Typography variant="subtitle1" fontWeight={600}>
-                    {user?.followersCount ?? 0}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      color: 'var(--text-primary, rgba(0,0,0,0.87))',
-                      opacity: 0.8,
-                    }}
-                  >
-                    Followers
-                  </Typography>
-                </Box>
-
-                <Box>
-                  <Typography variant="subtitle1" fontWeight={600}>
-                    {user?.followingCount ?? 0}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      color: 'var(--text-primary, rgba(0,0,0,0.87))',
-                      opacity: 0.8,
-                    }}
-                  >
-                    Following
-                  </Typography>
-                </Box>
-              </Stack>
-            </Box>
-
-            {/* bio / email / join date */}
-            <Box sx={{ maxWidth: 500 }}>
-              {user?.bio ? (
-                <Typography variant="body2">{user.bio}</Typography>
-              ) : null}
-
-              <Typography
-                variant="body2"
-                sx={{
-                  color: 'var(--text-primary, rgba(0,0,0,0.87))',
-                  opacity: 0.9,
-                  wordBreak: 'break-all',
-                }}
-              >
-                {user?.email}
-              </Typography>
-
-              {user?.createdAt && (
-                <Typography
-                  variant="caption"
-                  sx={{
-                    color: 'var(--text-primary, rgba(0,0,0,0.87))',
-                    opacity: 0.7,
-                  }}
-                >
-                  Joined:{' '}
-                  {new Date(user.createdAt).toLocaleDateString(undefined, {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                  })}
-                </Typography>
-              )}
-            </Box>
-
-            {/* actions */}
-            <Stack direction="row" spacing={2}>
-              <Button
-                variant="outlined"
-                color="inherit"
-                size="small"
-                onClick={handleLogout}
-              >
-                Logout
-              </Button>
-
-              <Button
-                variant="contained"
-                size="small"
-                onClick={handleOpenModal}
-              >
-                Add new post
-              </Button>
-            </Stack>
-          </Stack>
-        </Stack>
+        <ProfileHeader
+          user={user}
+          onLogout={handleLogout}
+          onAddPostClick={handleOpenModal}
+        />
 
         <Divider sx={{ opacity: 0.15 }} />
 
