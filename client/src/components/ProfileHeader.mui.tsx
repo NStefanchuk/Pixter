@@ -16,7 +16,11 @@ type ProfileHeaderProps = {
   onAddPostClick: () => void
 }
 
-const ProfileHeader = ({ user, onLogout, onAddPostClick }: ProfileHeaderProps) => {
+const ProfileHeader = ({
+  user,
+  onLogout,
+  onAddPostClick,
+}: ProfileHeaderProps) => {
   if (!user) return null
 
   return (
@@ -46,7 +50,11 @@ const ProfileHeader = ({ user, onLogout, onAddPostClick }: ProfileHeaderProps) =
       <Stack spacing={2} flex={1} sx={{ width: '100%' }}>
         {/* username + stats */}
         <Box>
-          <Typography variant="h5" fontWeight={600} sx={{ wordBreak: 'break-word' }}>
+          <Typography
+            variant="h5"
+            fontWeight={600}
+            sx={{ wordBreak: 'break-word' }}
+          >
             {user.username}
           </Typography>
 
@@ -80,7 +88,12 @@ const ProfileHeader = ({ user, onLogout, onAddPostClick }: ProfileHeaderProps) =
 
         {/* actions */}
         <Stack direction="row" spacing={2}>
-          <Button variant="outlined" color="inherit" size="small" onClick={onLogout}>
+          <Button
+            variant="outlined"
+            color="inherit"
+            size="small"
+            onClick={onLogout}
+          >
             Logout
           </Button>
           <Button variant="contained" size="small" onClick={onAddPostClick}>
