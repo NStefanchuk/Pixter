@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getPosts, getUser, createPost } from '../utils/api'
+import { getPosts, getUser, createPost, getComments } from '../utils/api'
 import PostTile from '../components/PostTile.mui'
-import { type Post } from '../utils/types'
+import { type Post, type Comment } from '../utils/types'
 
 import {
   Box,
@@ -27,6 +27,7 @@ const Profile = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
   const [posts, setPosts] = useState<Post[]>([])
+  const [comments, setComments] = useState<Comment[]>([]) // добавлено
 
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -73,6 +74,31 @@ const Profile = () => {
 
     fetchMyPosts()
   }, [user])
+
+  // load comments (once we have a user)
+  useEffect(() => {
+    const loadComments = async () => {
+      if (!user) return
+      try {
+        const all = await getComments()
+        setComments(Array.isArray(all) ? all : [])
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    loadComments()
+  }, [user])
+
+  const commentsByPostId = useMemo(() => {
+    const acc: Record<string, Comment[]> = {}
+    for (const c of comments) {
+      const key = c.postId
+      if (!key) continue
+      if (acc[key]) acc[key].push(c)
+      else acc[key] = [c]
+    }
+    return acc
+  }, [comments])
 
   const handleLogout = () => {
     localStorage.removeItem('pixter:auth')
@@ -338,6 +364,7 @@ const Profile = () => {
                   imageUrl={post.imageUrl}
                   description={post.description}
                   location={post.location}
+                  postComments={commentsByPostId[String(post.id)] ?? []} // добавлено
                 />
               ))}
             </Box>
