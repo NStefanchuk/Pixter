@@ -11,11 +11,11 @@ export type User = {
   id: string
   username: string
   email: string
-  password: string
   createdAt: string
-  followers: number
-  following: number
-  posts: number
+  bio?: string
+  followersCount: number
+  followingCount: number
+  postsCount: number
   avatarUrl?: string
 }
 

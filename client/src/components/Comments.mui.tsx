@@ -356,9 +356,8 @@ const Comments = ({
             minWidth: 'auto',
             px: 1.5,
             borderRadius: 1,
-            // нормальное состояние пусть будет просто primary
             '&.Mui-disabled': {
-              bgcolor: 'rgba(0,0,0,0.06)', // светло-серый фон в лайт теме
+              bgcolor: 'rgba(0,0,0,0.06)',
               color: 'text.disabled',
             },
           }}

@@ -12,6 +12,8 @@ import {
 import { RiCameraLensFill } from 'react-icons/ri'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import LightModeIcon from '@mui/icons-material/LightMode'
+import { useSelector } from 'react-redux'
+import { RootState } from '../store/store'
 
 const Header = () => {
   const [mode, setMode] = useState<'light' | 'dark'>(() => {
@@ -26,6 +28,9 @@ const Header = () => {
       window.matchMedia('(prefers-color-scheme: dark)').matches
     return prefersDark ? 'dark' : 'light'
   })
+
+  const userData = useSelector((state: RootState) => state.user.userData)
+  console.log(userData);
 
   useEffect(() => {
     const root = document.documentElement
