@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import {
   AppBar,
   Toolbar,
@@ -8,6 +8,8 @@ import {
   Button,
   IconButton,
   Tooltip,
+  Stack,
+  Avatar,
 } from '@mui/material'
 import { RiCameraLensFill } from 'react-icons/ri'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
@@ -30,7 +32,8 @@ const Header = () => {
   })
 
   const userData = useSelector((state: RootState) => state.user.userData)
-  console.log(userData);
+  const location = useLocation()
+  const isOnProfile = location.pathname.startsWith('/profile')
 
   useEffect(() => {
     const root = document.documentElement
@@ -132,25 +135,19 @@ const Header = () => {
             gap: 1,
           }}
         >
-          <Button
-            component={Link}
-            to="/profile"
-            variant="text"
-            size="small"
-            sx={{
-              color: 'var(--text-primary)',
-              textTransform: 'none',
-              fontWeight: 500,
-              fontSize: '0.9rem',
-              px: 1.5,
-              '&:hover': {
-                color: 'primary.main',
-                backgroundColor: 'transparent',
-              },
-            }}
-          >
-            Profile
-          </Button>
+          {!isOnProfile && (
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={1}
+              component={Link}
+              to="/profile"
+              sx={{ textDecoration: 'none', color: 'var(--text-primary)' }}
+            >
+              <Avatar src={userData?.avatarUrl} />
+              <Typography>{userData?.username}</Typography>
+            </Stack>
+          )}
 
           <Tooltip
             title={
