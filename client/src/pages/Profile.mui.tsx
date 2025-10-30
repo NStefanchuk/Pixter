@@ -1,16 +1,12 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getPosts, getUser, createPost, getComments } from '../utils/api'
-import PostTile from '../components/PostTile.mui'
 import { type Post, type Comment } from '../utils/types'
 
 import {
   Box,
-  Typography,
-  Stack,
   Button,
   Divider,
-  CircularProgress,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -27,7 +23,7 @@ const Profile = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
   const [posts, setPosts] = useState<Post[]>([])
-  const [comments, setComments] = useState<Comment[]>([]) // добавлено
+  const [comments, setComments] = useState<Comment[]>([])
 
   const [isLoading, setIsLoading] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -186,7 +182,7 @@ const Profile = () => {
 
         <Divider sx={{ opacity: 0.15 }} />
 
-        {/* ===== POSTS GRID (пока черновик, без CSS) ===== */}
+        {/* ===== POSTS GRID ===== */}
         <ProfilePostsSection
           posts={posts}
           isLoading={isLoading}

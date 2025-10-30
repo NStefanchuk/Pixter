@@ -8,11 +8,13 @@ import {
   DialogContent,
   IconButton,
   Typography,
-  Stack,
   useTheme,
   useMediaQuery,
+  Menu,
+  MenuItem,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 import Comments from './Comments.mui'
 import { type Comment } from '../utils/types'
@@ -33,15 +35,37 @@ const PostTile = ({
   postComments = [],
 }: PostProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const handleOpenPostModal = () => {
-    setIsOpen(true)
-  }
-  const handleClosePostModal = () => {
-    setIsOpen(false)
-  }
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const menuOpen = Boolean(anchorEl)
 
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
+
+  // диалог
+  const handleOpenPostModal = () => setIsOpen(true)
+  const handleClosePostModal = () => setIsOpen(false)
+
+  // меню
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+  }
+
+  // пункты меню
+  const handleEdit = () => {
+    // тут можешь открыть свой edit-модал
+    console.log('edit post', id)
+    handleMenuClose()
+  }
+
+  const handleDelete = () => {
+    // тут удаление
+    console.log('delete post', id)
+    handleMenuClose()
+  }
 
   return (
     <>
@@ -135,14 +159,46 @@ const PostTile = ({
             >
               <CloseIcon />
             </IconButton>
+            <IconButton
+              onClick={handleMenuClick}
+              size="small"
+              sx={{
+                position: 'absolute',
+                top: 8,
+                right: 48,
+                bgcolor: 'rgba(0,0,0,0.4)',
+                color: '#fff',
+                '&:hover': {
+                  bgcolor: 'rgba(0,0,0,0.6)',
+                },
+              }}
+              aria-label="More actions"
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={menuOpen}
+              onClose={handleMenuClose}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+            >
+              <MenuItem onClick={handleEdit}>Edit</MenuItem>
+              <MenuItem onClick={handleDelete}>Delete</MenuItem>
+            </Menu>
           </Box>
-
           <Box
             sx={{
               flexShrink: 0,
               px: 2,
               py: 1.5,
-              borderBottom: (theme) => `1px solid var(--divider)`,
+              borderBottom: () => `1px solid var(--divider)`,
             }}
           >
             {description && (
@@ -163,7 +219,6 @@ const PostTile = ({
               </Typography>
             )}
           </Box>
-
           <Box
             sx={{
               flex: 1,
