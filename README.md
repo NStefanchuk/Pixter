@@ -2,15 +2,15 @@
 
 Pixter is a social network for photographers to share photos, get feedback, and grow together.
 
-[![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://react.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](https://www.typescriptlang.org/)
-[![MUI](https://img.shields.io/badge/MUI-007FFF?logo=mui&logoColor=fff)](https://mui.com/)
-[![React Router](https://img.shields.io/badge/React%20Router-CA4245?logo=react-router&logoColor=fff)](https://reactrouter.com/)
-[![Redux Toolkit](https://img.shields.io/badge/Redux%20Toolkit-593D88?logo=redux&logoColor=fff)](https://redux-toolkit.js.org/)
-[![React Icons](https://img.shields.io/badge/React%20Icons-6AD1E3?logo=react&logoColor=fff)](https://react-icons.github.io/react-icons/)
-[![react-hot-toast](https://img.shields.io/badge/react--hot--toast-EC5A4F?logo=react&logoColor=fff)](https://react-hot-toast.com/)
-[![Node.js](https://img.shields.io/badge/Node.js-339933?logo=node.js&logoColor=fff)](https://nodejs.org/)
-[![Express](https://img.shields.io/badge/Express-000000?logo=express&logoColor=fff)](https://expressjs.com/)
+[![React](https://img.shields.io/badge/-React-61DAFB?logo=react&logoColor=black&style=for-the-badge)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?logo=typescript&logoColor=white&style=for-the-badge)](https://www.typescriptlang.org/)
+[![MUI](https://img.shields.io/badge/-MUI-007FFF?logo=mui&logoColor=white&style=for-the-badge)](https://mui.com/)
+[![React Router](https://img.shields.io/badge/-React%20Router-CA4245?logo=react-router&logoColor=white&style=for-the-badge)](https://reactrouter.com/)
+[![Redux Toolkit](https://img.shields.io/badge/-Redux%20Toolkit-764ABC?logo=redux&logoColor=white&style=for-the-badge)](https://redux-toolkit.js.org/)
+[![React Icons](https://img.shields.io/badge/-React%20Icons-6AD1E3?logo=react&logoColor=black&style=for-the-badge)](https://react-icons.github.io/react-icons/)
+[![react-hot-toast](https://img.shields.io/badge/-react--hot--toast-EC5A4F?logo=react&logoColor=white&style=for-the-badge)](https://react-hot-toast.com/)
+[![Node.js](https://img.shields.io/badge/-Node.js-339933?logo=node.js&logoColor=white&style=for-the-badge)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/-Express-000000?logo=express&logoColor=white&style=for-the-badge)](https://expressjs.com/)
 
 ## Features
 
