@@ -46,8 +46,8 @@ const ProfilePostsSection = ({
               id={post.id}
               imageUrl={post.imageUrl}
               description={post.description}
-              location={post.location}
               postComments={commentsByPostId[String(post.id)] ?? []}
+              authorId={post.authorId}
             />
           ))}
         </Box>

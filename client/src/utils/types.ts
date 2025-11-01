@@ -1,11 +1,19 @@
 export type Post = {
   id: string
+  authorId: string
   imageUrl: string
-  userId: string
-  description?: string
-  location?: string
-  createdAt?: string
+  description: string
+  createdAt: string
+  updatedAt: string
+  likeCount: number
+  commentCount: number
+  author: {
+    id: string
+    username: string
+    avatarUrl: string
+  }
 }
+
 
 export type User = {
   id: string

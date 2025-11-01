@@ -18,6 +18,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 import Comments from './Comments.mui'
 import { type Comment } from '../utils/types'
+import { useSelector } from 'react-redux'
+import { RootState } from '../store/store'
+import { getAuthHeaders } from '../utils/api'
 
 interface PostProps {
   id: string
@@ -25,6 +28,7 @@ interface PostProps {
   description?: string
   location?: string
   postComments?: Comment[]
+  authorId: string
 }
 
 const PostTile = ({
@@ -33,10 +37,12 @@ const PostTile = ({
   description,
   location,
   postComments = [],
+  authorId,
 }: PostProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const menuOpen = Boolean(anchorEl)
+  const userData = useSelector((state: RootState) => state.user.userData)
 
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
@@ -56,14 +62,22 @@ const PostTile = ({
 
   // пункты меню
   const handleEdit = () => {
-    // тут можешь открыть свой edit-модал
-    console.log('edit post', id)
     handleMenuClose()
   }
 
-  const handleDelete = () => {
-    // тут удаление
-    console.log('delete post', id)
+  const handleDelete = async (postId: string) => {
+    try {
+      const headers = getAuthHeaders()
+
+      const res = await fetch(`http://localhost:4000/posts/${postId}`, {
+        method: 'DELETE',
+        headers,
+      })
+      if (!res.ok) throw new Error('Failed to delete')
+      return await res.json()
+    } catch (e) {
+      console.error(e)
+    }
     handleMenuClose()
   }
 
@@ -159,23 +173,25 @@ const PostTile = ({
             >
               <CloseIcon />
             </IconButton>
-            <IconButton
-              onClick={handleMenuClick}
-              size="small"
-              sx={{
-                position: 'absolute',
-                top: 8,
-                right: 48,
-                bgcolor: 'rgba(0,0,0,0.4)',
-                color: '#fff',
-                '&:hover': {
-                  bgcolor: 'rgba(0,0,0,0.6)',
-                },
-              }}
-              aria-label="More actions"
-            >
-              <MoreVertIcon />
-            </IconButton>
+            {userData?.id === authorId && (
+              <IconButton
+                onClick={handleMenuClick}
+                size="small"
+                sx={{
+                  position: 'absolute',
+                  top: 8,
+                  right: 48,
+                  bgcolor: 'rgba(0,0,0,0.4)',
+                  color: '#fff',
+                  '&:hover': {
+                    bgcolor: 'rgba(0,0,0,0.6)',
+                  },
+                }}
+                aria-label="More actions"
+              >
+                <MoreVertIcon />
+              </IconButton>
+            )}
             <Menu
               anchorEl={anchorEl}
               open={menuOpen}
@@ -190,7 +206,7 @@ const PostTile = ({
               }}
             >
               <MenuItem onClick={handleEdit}>Edit</MenuItem>
-              <MenuItem onClick={handleDelete}>Delete</MenuItem>
+              <MenuItem onClick={() => handleDelete(id)}>Delete</MenuItem>
             </Menu>
           </Box>
           <Box
