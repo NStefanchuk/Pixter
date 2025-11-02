@@ -12,16 +12,18 @@ import {
   useMediaQuery,
   Menu,
   MenuItem,
+  TextField,
+  Button,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-
+import { toast } from 'react-hot-toast'
 import Comments from './Comments.mui'
-import { type Comment } from '../utils/types'
+import { type Comment, type Post } from '../utils/types'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../store/store'
 import { getAuthHeaders } from '../utils/api'
-import { removePost } from '../slices/posts/postsSlice'
+import { removePost, updatePost } from '../slices/posts/postsSlice'
 
 interface PostProps {
   id: string
@@ -47,14 +49,17 @@ const PostTile = ({
   const menuOpen = Boolean(anchorEl)
   const userData = useSelector((state: RootState) => state.user.userData)
 
+
+  const [isEditing, setIsEditing] = useState(false)
+  const [draftDescription, setDraftDescription] = useState(description ?? '')
+
+  const posts = useSelector((state: RootState) => state.posts.items)
   const theme = useTheme()
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
-  // диалог
   const handleOpenPostModal = () => setIsOpen(true)
   const handleClosePostModal = () => setIsOpen(false)
 
-  // меню
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
@@ -63,9 +68,41 @@ const PostTile = ({
     setAnchorEl(null)
   }
 
-  // пункты меню
   const handleEdit = () => {
     handleMenuClose()
+    setIsEditing(true)
+    setDraftDescription(description ?? '')
+  }
+
+  const handleSave = async () => {
+    try {
+      const headers = {
+        ...getAuthHeaders(),
+        'Content-Type': 'application/json',
+      }
+
+      const res = await fetch(`http://localhost:4000/posts/${id}`, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({
+          description: draftDescription,
+        }),
+      })
+
+      if (!res.ok) {
+        throw new Error('Failed to update post')
+      }
+
+      const updatedFromServer: Post = await res.json()
+
+      dispatch(updatePost(updatedFromServer))
+
+      setIsEditing(false)
+      toast.success('Post updated')
+    } catch (e) {
+      console.error(e)
+      toast.error('Failed to update')
+    }
   }
 
   const handleDelete = async (postId: string) => {
@@ -77,12 +114,14 @@ const PostTile = ({
         headers,
       })
       if (!res.ok) throw new Error('Failed to delete')
-      return await res.json()
+      dispatch(removePost(postId))
+      handleMenuClose()
+      setIsOpen(false)
+      toast.success('Post deleted')
     } catch (e) {
-      console.error(e)
+      toast.error('Failed to delete post')
+      return
     }
-    dispatch(removePost(postId))
-    handleMenuClose()
   }
 
   return (
@@ -221,16 +260,43 @@ const PostTile = ({
               borderBottom: () => `1px solid var(--divider)`,
             }}
           >
-            {description && (
-              <Typography
-                variant="body2"
-                sx={{ wordBreak: 'break-word', mb: location ? 0.5 : 0 }}
-              >
-                {description}
-              </Typography>
+            {isEditing ? (
+              <>
+                <TextField
+                  value={draftDescription}
+                  onChange={(e) => setDraftDescription(e.target.value)}
+                  fullWidth
+                  multiline
+                  minRows={2}
+                  label="Description"
+                />
+                <Box sx={{ mt: 1, display: 'flex', gap: 1 }}>
+                  <Button variant="contained" onClick={handleSave}>
+                    Save
+                  </Button>
+                  <Button
+                    variant="text"
+                    onClick={() => {
+                      setIsEditing(false)
+                      setDraftDescription(description ?? '')
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Box>
+              </>
+            ) : (
+              description && (
+                <Typography
+                  variant="body2"
+                  sx={{ wordBreak: 'break-word', mb: location ? 0.5 : 0 }}
+                >
+                  {description}
+                </Typography>
+              )
             )}
 
-            {location && (
+            {location && !isEditing && (
               <Typography
                 variant="caption"
                 sx={{ color: 'var(--text-secondary)' }}
@@ -239,6 +305,7 @@ const PostTile = ({
               </Typography>
             )}
           </Box>
+
           <Box
             sx={{
               flex: 1,
