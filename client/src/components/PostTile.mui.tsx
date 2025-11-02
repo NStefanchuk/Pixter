@@ -18,9 +18,10 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 import Comments from './Comments.mui'
 import { type Comment } from '../utils/types'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../store/store'
 import { getAuthHeaders } from '../utils/api'
+import { removePost } from '../slices/posts/postsSlice'
 
 interface PostProps {
   id: string
@@ -39,6 +40,8 @@ const PostTile = ({
   postComments = [],
   authorId,
 }: PostProps) => {
+  const dispatch = useDispatch()
+
   const [isOpen, setIsOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const menuOpen = Boolean(anchorEl)
@@ -78,6 +81,7 @@ const PostTile = ({
     } catch (e) {
       console.error(e)
     }
+    dispatch(removePost(postId))
     handleMenuClose()
   }
 

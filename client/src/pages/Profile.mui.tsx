@@ -15,14 +15,19 @@ import {
 } from '@mui/material'
 import ProfileHeader from '../components/ProfileHeader.mui'
 import ProfilePostsSection from '../components/ProfilePostsSection.mui'
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from '../store/store'
+import { setPosts } from '../slices/posts/postsSlice'
 
 const Profile = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const [user, setUser] = useState<any>(null)
   const [isOpen, setIsOpen] = useState(false)
   const [imageUrl, setImageUrl] = useState('')
-  const [posts, setPosts] = useState<Post[]>([])
+  const posts = useSelector((state: RootState) => state.posts.items)
+
   const [comments, setComments] = useState<Comment[]>([])
 
   const [isLoading, setIsLoading] = useState(false)
@@ -60,7 +65,7 @@ const Profile = () => {
         const mine = Array.isArray(allPosts)
           ? allPosts.filter((p: any) => p.author?.id === user.id)
           : []
-        setPosts(mine)
+        dispatch(setPosts(mine))
       } catch (err) {
         console.error(err)
       } finally {
@@ -134,13 +139,13 @@ const Profile = () => {
     try {
       const createdPost = await createPost(payload)
       if (createdPost?.author?.id === user?.id) {
-        setPosts((prev) => [createdPost, ...prev])
+        dispatch(setPosts([createdPost, ...posts]))
       } else {
         const allPosts = await getPosts()
         const mine = Array.isArray(allPosts)
           ? allPosts.filter((p: any) => p.author?.id === user.id)
           : []
-        setPosts(mine)
+        dispatch(setPosts(mine))
       }
 
       handleCloseModal()
