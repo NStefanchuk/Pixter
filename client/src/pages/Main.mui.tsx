@@ -1,14 +1,16 @@
 import { useEffect, useState, useMemo } from 'react'
+import { useSelector } from 'react-redux'
+import { Box } from '@mui/material'
+
 import { getComments, getPosts } from '../utils/api'
 import { type Post, type Comment } from '../utils/types'
-
-import { Box, Card, Avatar, Typography, Stack, Divider } from '@mui/material'
-
-import Comments from '../components/Comments.mui'
+import { RootState } from '../store/store'
+import PostTile from '../components/PostTile.mui'
 
 const Main = () => {
   const [posts, setPosts] = useState<Post[]>([])
   const [comments, setComments] = useState<Comment[]>([])
+  const userData = useSelector((state: RootState) => state.user.userData)
 
   const commentsByPostId = useMemo(() => {
     const acc: Record<string, Comment[]> = {}
@@ -55,142 +57,23 @@ const Main = () => {
         }}
       >
         {posts.map((post) => {
-          const author = (post as any).author
           const postComments =
             (post.id ? commentsByPostId[post.id] : undefined) ?? []
-          const createdAt = post.createdAt ? new Date(post.createdAt) : null
 
           return (
-            <Card
+            <PostTile
               key={post.id}
-              variant="outlined"
-              sx={{
-                borderRadius: 2,
-                bgcolor: 'var(--bg-paper, #fff)',
-                border: '1px solid',
-                borderColor: 'var(--divider, rgba(0,0,0,0.12))',
-                boxShadow: '0px 24px 64px rgba(0,0,0,0.8)',
-                overflow: 'hidden',
-              }}
-            >
-              {/* HEADER: автор + дата */}
-              <Stack
-                direction="row"
-                spacing={2}
-                alignItems="flex-start"
-                sx={{ p: 2, pb: 1 }}
-              >
-                <Avatar
-                  src={author?.avatarUrl || ''}
-                  alt={author?.username || 'User'}
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    fontSize: 16,
-                    fontWeight: 600,
-                    bgcolor: author?.avatarUrl ? undefined : 'primary.main',
-                  }}
-                >
-                  {!author?.avatarUrl
-                    ? (author?.username || 'U')[0]?.toUpperCase()
-                    : undefined}
-                </Avatar>
-
-                <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography
-                    variant="body2"
-                    fontWeight={600}
-                    sx={{
-                      lineHeight: 1.2,
-                      wordBreak: 'break-word',
-                      color: 'var(--text-primary, rgba(0,0,0,0.87))',
-                    }}
-                  >
-                    {author?.username || 'Unknown'}
-                  </Typography>
-
-                  {createdAt && (
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        color: 'var(--text-secondary, rgba(0,0,0,0.6))',
-                        lineHeight: 1.2,
-                        display: 'block',
-                      }}
-                    >
-                      {createdAt.toLocaleDateString('en-GB', {
-                        day: '2-digit',
-                        month: 'short',
-                        year: 'numeric',
-                      })}
-                    </Typography>
-                  )}
-
-                  {post.location && (
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        color: 'var(--text-secondary, rgba(0,0,0,0.6))',
-                        lineHeight: 1.2,
-                        display: 'block',
-                      }}
-                    >
-                      {post.location}
-                    </Typography>
-                  )}
-                </Box>
-              </Stack>
-
-              {/* Фото */}
-              <Box
-                sx={{
-                  width: '100%',
-                  backgroundColor: 'black',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Box
-                  component="img"
-                  src={post.imageUrl}
-                  alt={post.description || 'Post image'}
-                  sx={{
-                    width: '100%',
-                    maxHeight: 600,
-                    objectFit: 'cover',
-                    display: 'block',
-                  }}
-                />
-              </Box>
-
-              {/* Описание поста */}
-              {post.description && (
-                <Typography
-                  variant="body2"
-                  sx={{
-                    px: 2,
-                    pt: 2,
-                    pb: 1,
-                    color: 'text.primary',
-                    wordBreak: 'break-word',
-                  }}
-                >
-                  {post.description}
-                </Typography>
-              )}
-
-              <Divider sx={{ opacity: 0.12 }} />
-
-              {/* Комментарии */}
-              <Box sx={{ p: 2 }}>
-                <Comments
-                  postComments={postComments}
-                  postId={String(post.id)}
-                  className=""
-                />
-              </Box>
-            </Card>
+              id={post.id}
+              imageUrl={post.imageUrl}
+              description={post.description}
+              location={post.location}
+              postComments={postComments}
+              authorId={post.author?.id ?? ''}
+              authorName={post.author?.username}
+              authorAvatarUrl={post.author?.avatarUrl}
+              showAuthor
+              inline
+            />
           )
         })}
       </Box>
