@@ -17,7 +17,7 @@ Pixter is a social network for photographers to share photos, get feedback, and 
 - Authentication: sign up / sign in.
 - Profile: avatar, bio, stats (posts, followers, following).
 - Feed: responsive cards with author, date, location, and photo.
-- Post modal: image preview and comments.
+- Post modal: image preview, editing and comments.
 - Comments: list, add comment (client-side integration).
 - Create post: add image URL and description.
 - Light/Dark mode: persistent toggle with CSS variables and Header switch.
